@@ -11,7 +11,8 @@ export default {
     // localhost:8000/api/** -> https://preview.pro.ant.design/api/**
     '/api/': {
       // 要代理的地址
-      target: 'https://preview.pro.ant.design',
+      // target: 'https://preview.pro.ant.design',
+      target: 'https://office-cn-hangzhou.imm.aliyuncs.com',
       // 配置了这个可以从 http 代理到 https
       // 依赖 origin 的功能可能需要这个，比如 cookie
       changeOrigin: true,
@@ -19,7 +20,8 @@ export default {
   },
   test: {
     '/api/': {
-      target: 'https://proapi.azurewebsites.net',
+      // target: 'https://proapi.azurewebsites.net',
+      target: 'https://office-cn-hangzhou.imm.aliyuncs.com',
       changeOrigin: true,
       pathRewrite: {
         '^': '',
@@ -28,7 +30,8 @@ export default {
   },
   pre: {
     '/api/': {
-      target: 'your pre url',
+      // https://office-cn-hangzhou.imm.aliyuncs.com/office/f/16177ae32a1b20df467f0556414fa2849993ffef?_w_tokentype=1&hidecmb=1&simple=1
+      target: 'https://office-cn-hangzhou.imm.aliyuncs.com',
       changeOrigin: true,
       pathRewrite: {
         '^': '',
