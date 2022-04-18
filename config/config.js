@@ -12,6 +12,13 @@ export default defineConfig({
   dva: {
     hmr: true,
   },
+  chainWebpack(config) {
+    config.module
+      .rule('woff')
+      .test(/.(woff|eot|woff2|ttf|otf)$/)
+      .use('file-loader')
+      .loader('file-loader');
+  },
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
     locale: true,
@@ -66,7 +73,13 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
-  mfsu: {},
-  webpack5: {},
-  exportStatic: {},
+  mfsu: {
+
+  },
+  webpack5: {
+
+  },
+  exportStatic: {
+
+  },
 });

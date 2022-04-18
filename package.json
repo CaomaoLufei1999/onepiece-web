@@ -99,6 +99,7 @@
     "react-codemirror2": "^7.2.1",
     "react-dev-inspector": "^1.1.1",
     "react-dom": "^17.0.0",
+    "react-file-viewer": "^1.2.1",
     "react-helmet-async": "^1.2.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-jwchat": "^1.2.1",

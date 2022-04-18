@@ -44,22 +44,22 @@ export default [
             redirect: '/account/center',
           },
           {
-            name: 'center',
+            // name: 'center',
             path: '/account/center',
             component: './User/Account/Center',
           },
           {
-            name: 'setting',
+            // name: 'setting',
             path: '/account/setting',
             component: './User/Account/Setting',
           },
           {
-            name: 'message',
+            // name: 'message',
             path: '/account/message',
             component: './User/Account/Message',
           },
           {
-            name: 'chat',
+            // name: 'chat',
             path: '/account/chat',
             component: './User/Account/Message/WebChat',
           },
@@ -190,9 +190,6 @@ export default [
   },
   {
     path: '/article',
-    // name: 'article',
-    // icon: 'home',
-    // hideChildrenInMenu:true,
     routes: [
       {
         path: '/article/detail',
@@ -273,7 +270,12 @@ export default [
     name: 'read-book',
     icon: 'read',
     path: '/read-book',
-    component: './TableList',
+    component: './Read',
+  },
+  {
+    path: '/read-book/detail',
+    component: './Read/BookDetail',
+    hideInMenu: true,// 隐藏菜单中的路由
   },
   {
     name: 'about-me',
@@ -307,14 +309,14 @@ export default [
         component: './Tools/Mind',
       },
       {
-        path: '/tools/editor-code',
-        name: 'editor-code',
-        component: './Home',
+        path: '/tools/code-paste',
+        name: 'code-paste',
+        component: './Tools/CodePaste',
       },
       {
-        path: '/tools/editor-map',
-        name: 'editor-map',
-        component: './Home',
+        path: '/tools/resume-make',
+        name: 'resume-make',
+        component: './Tools/ResumeMaking',
       },
       {
         component: './404',
