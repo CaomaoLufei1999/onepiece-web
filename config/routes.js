@@ -1,15 +1,67 @@
+/**
+ * 参考配置：https://pro.ant.design/zh-CN/docs/new-page
+ * name:string 配置菜单的 name，如果配置了国际化，name 为国际化的 key。
+ * icon:string 配置菜单的图标，默认使用 antd 的 icon 名，默认不适用二级菜单的 icon。
+ * access:string 权限配置，需要预先配置权限
+ * hideChildrenInMenu:true 用于隐藏不需要在菜单中展示的子路由。
+ * hideInMenu:true 可以在菜单中不展示这个路由，包括子路由。
+ * hideInBreadcrumb:true 可以在面包屑中不展示这个路由，包括子路由。
+ * headerRender:false 当前路由不展示顶栏
+ * footerRender:false 当前路由不展示页脚
+ * menuRender: false 当前路由不展示菜单
+ * menuHeaderRender: false 当前路由不展示菜单顶栏
+ * flatMenu 子项往上提，只是不展示父菜单
+ */
 export default [
   {
-    path: '/User',
+    path: '/user',
     layout: false,
     routes: [
       {
-        path: '/User',
+        path: '/user',
         routes: [
           {
             name: 'login',
-            path: '/User/login',
+            path: '/user/login',
             component: './User/Login',
+          },
+        ],
+      },
+      {
+        component: './404',
+      },
+    ],
+  },
+  {
+    path: '/account',
+    // layout: false,
+    routes: [
+      {
+        path: '/account',
+        routes: [
+          {
+            path: '/account',
+            redirect: '/account/center',
+          },
+          {
+            name: 'center',
+            path: '/account/center',
+            component: './User/Account/Center',
+          },
+          {
+            name: 'setting',
+            path: '/account/setting',
+            component: './User/Account/Setting',
+          },
+          {
+            name: 'message',
+            path: '/account/message',
+            component: './User/Account/Message',
+          },
+          {
+            name: 'chat',
+            path: '/account/chat',
+            component: './User/Account/Message/WebChat',
           },
         ],
       },
@@ -133,29 +185,48 @@ export default [
   {
     name: 'blog',
     icon: 'edit',
-    path: '/blog',
-    component: './TableList',
+    path: '/community',
+    component: './Community',
+  },
+  {
+    path: '/article',
+    // name: 'article',
+    // icon: 'home',
+    // hideChildrenInMenu:true,
+    routes: [
+      {
+        path: '/article/detail',
+        component: './Article/Viewer',
+      },
+      {
+        path: '/article/edit',
+        component: './Article/Editor',
+        headerRender:false, // 当前路由不展示顶栏
+        footerRender:false, // 当前路由不展示页脚
+      }
+    ]
   },
   {
     path: '/schedule-study',
     name: 'schedule-study',
     icon: 'schedule',
-    component: './Admin',
+    // component: './Admin',
     routes: [
       {
         path: '/schedule-study/algorithm',
         name: 'algorithm',
-        component: './Home',
+        component: './ScheduleStudy/Algorithm',
       },
       {
         path: '/schedule-study/sql',
         name: 'sql',
-        component: './Home',
+        component: './ScheduleStudy/Sql',
       },
       {
         path: '/schedule-study/program',
         name: 'program',
-        component: './Home',
+        component: './ScheduleStudy/Program',
+
       },
       {
         component: './404',
