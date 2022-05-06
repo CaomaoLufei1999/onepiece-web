@@ -30,7 +30,6 @@ export default {
   },
   pre: {
     '/api/': {
-      // https://office-cn-hangzhou.imm.aliyuncs.com/office/f/16177ae32a1b20df467f0556414fa2849993ffef?_w_tokentype=1&hidecmb=1&simple=1
       target: 'https://office-cn-hangzhou.imm.aliyuncs.com',
       changeOrigin: true,
       pathRewrite: {

@@ -59,6 +59,11 @@ export default [
             component: './User/Account/Message',
           },
           {
+            // name: 'message',
+            path: '/account/control-blog',
+            component: './User/Account/Manage',
+          },
+          {
             // name: 'chat',
             path: '/account/chat',
             component: './User/Account/Message/WebChat',
@@ -165,11 +170,6 @@ export default [
       {
         path: '/talk/blink',
         name: 'blink',
-        component: './Home',
-      },
-      {
-        path: '/talk/topic',
-        name: 'topic',
         component: './Home',
       },
       {
