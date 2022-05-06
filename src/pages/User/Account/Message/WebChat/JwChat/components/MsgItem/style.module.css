@@ -1,31 +1,47 @@
 @import '../../style/common.css';
 
 .content {
+  display: flex;
+  flex-direction: row;
   padding-top: 20px;
+  /* background-color: red; */
 }
 .avatar {
-  min-width: 35px;
-  min-height: 35px;
   width: 35px;
+  min-width: 35px;
   height: 35px;
-  padding-top: 14px;
+  min-height: 35px;
+  background-color: blue;
+
+  /* padding-top: 14px; */
 }
 .avatar > img {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 35px;
+  height: 35px;
   overflow: hidden;
+  border-radius: 50%;
 }
 .text_area {
-  flex: 1;
-  padding: 0px 10px;
   display: flex;
+  flex: 1;
   flex-direction: column;
+  margin-top: -17px;
+  margin-left: 10px;
+  /* background-color: yellow; */
+  /* padding: 0px 10px; */
+}
+.text_area_me {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-top: -17px;
+  margin-right: 10px;
+  /* background-color: yellow; */
 }
 .comment_area {
-  font-size: 12px;
-  color: #999;
   padding-bottom: 4px;
+  color: #999;
+  font-size: 12px;
 }
 .nickname_text {
 }

@@ -1,22 +1,22 @@
-import {GridContent} from "@ant-design/pro-layout";
-import React, { useState } from 'react'
-import { Chat, ContactList } from '../WebChat/JwChat/components'
-import { contact, contactList, messageList, my } from './mock'
-import {Col, Row} from "antd";
+import { GridContent } from '@ant-design/pro-layout';
+import React, { useState } from 'react';
+import { Chat, ContactList } from './JwChat/components';
+import { contact, contactList, messageList, my } from './mock';
+import { Col, Row } from 'antd';
 
 const WebChat = () => {
   const [msgList, setMsgList] = useState(messageList);
-  return(
+  return (
     <GridContent>
       <Row>
-        <Col lg={16} offset={3}>
+        <Col lg={20} offset={2}>
           <div style={{ display: 'flex' }}>
             <div>
               <ContactList
                 data={contactList}
                 style={{
                   marginRight: 10,
-                  height: 500,
+                  height: 550,
                   borderRadius: 5,
                   overflow: 'hidden',
                   width: 240,
@@ -31,8 +31,8 @@ const WebChat = () => {
                 onSend={(msg) => setMsgList([...msgList, msg])}
                 onEarlier={() => console.log('EarlierEarlier')}
                 style={{
-                  width: 600,
-                  height: 500,
+                  width: 750,
+                  height: 550,
                   borderRadius: 5,
                 }}
               />
@@ -42,6 +42,6 @@ const WebChat = () => {
       </Row>
     </GridContent>
   );
-}
+};
 
 export default WebChat;

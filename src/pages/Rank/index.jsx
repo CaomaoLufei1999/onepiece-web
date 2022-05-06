@@ -7,6 +7,7 @@ import PointsList from './components/PointsList';
 import SolveList from './components/SolveList';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'umi';
+
 /**
  * @en-US Add node
  * @zh-CN 添加节点
@@ -18,28 +19,35 @@ const TableList = (props) => {
    * @en-US International configuration
    * @zh-CN 国际化配置
    * */
+  let rankName = [
+    { title: '积分总榜', description: '创作积累积分，周更' },
+    { title: '作者周榜', description: '近期活跃作者，周更' },
+    { title: '博客热榜', description: '72小时热度，日更' },
+    { title: '领域内容榜单', description: '专业领域精品，日更' },
+    { title: '解题作者榜单', description: '作者解题榜单，日更' },
+  ];
   const [loading, setLoading] = useState(false);
-  const [rankName, setRankName] = useState([]);
+  // const [rankName, setRankName] = useState([]);
   const [id, setId] = useState(props.route.name);
 
-  const loadRankData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    fetch('http://localhost:3000/rankName')
-      .then((res) => res.json())
-      .then((body) => {
-        setRankName([...body]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
-  useEffect(() => {
-    loadRankData();
-  }, []);
+  // const loadRankData = () => {
+  //   if (loading) {
+  //     return;
+  //   }
+  //   setLoading(true);
+  //   fetch('http://localhost:3000/rankName')
+  //     .then((res) => res.json())
+  //     .then((body) => {
+  //       setRankName([...body]);
+  //       setLoading(false);
+  //     })
+  //     .catch(() => {
+  //       setLoading(false);
+  //     });
+  // };
+  // useEffect(() => {
+  //   loadRankData();
+  // }, []);
   let map = {
     1: 'total',
     2: 'weekly',
