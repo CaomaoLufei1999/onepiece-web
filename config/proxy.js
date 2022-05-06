@@ -20,8 +20,6 @@ export default {
   },
   test: {
     '/api/': {
-      // target: 'https://proapi.azurewebsites.net',
-      target: 'https://office-cn-hangzhou.imm.aliyuncs.com',
       changeOrigin: true,
       pathRewrite: {
         '^': '',
@@ -30,7 +28,7 @@ export default {
   },
   pre: {
     '/api/': {
-      target: 'https://office-cn-hangzhou.imm.aliyuncs.com',
+      target: 'https://proapi.azurewebsites.net',
       changeOrigin: true,
       pathRewrite: {
         '^': '',

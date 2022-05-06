@@ -1,4 +1,4 @@
-import { IContact } from './JwChat/components/Chat/Chat'
+import { IContact } from './JwChat/components/Chat/Chat';
 
 export const contactList = [
   {
@@ -106,21 +106,21 @@ export const contactList = [
     message: '您已被该玩家禁言',
     date: '02-07',
   },
-]
+];
 
 export const contact: IContact = {
   id: 9527,
   avatar: '//game.gtimg.cn/images/lol/act/img/champion/Khazix.png',
   nickname: '卡兹克',
   desc: '看我点水就完了',
-}
+};
 
 export const my = {
   id: 1234,
   avatar: '//game.gtimg.cn/images/lol/act/img/champion/Khazix.png',
   nickname: 'sirosong',
   desc: 'carry大神',
-}
+};
 
 export const messageList = [
   {
@@ -161,7 +161,7 @@ export const messageList = [
     date: 1610016580,
     user: {
       id: 1234,
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC_aiJfKgKic97zGdWHJ-G1WiiEDHgPo8gSg&usqp=CAU',
+      avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
       nickname: 'sirosong',
       desc: '这是我的第一条信息',
     },
@@ -172,7 +172,7 @@ export const messageList = [
     date: 1610016880,
     user: {
       id: 1234,
-      avatar: '//game.gtimg.cn/images/lol/act/img/champion/Khazix.png',
+      avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
       nickname: 'sirosong',
       desc: '这是我的第一条信息',
     },
@@ -207,4 +207,4 @@ export const messageList = [
       content: '//game.gtimg.cn/images/lol/act/img/champion/Khazix.png',
     },
   },
-]
+];
