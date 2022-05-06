@@ -81,7 +81,7 @@ export default [
     name: 'search',
     hideChildrenInMenu: true,
     hideInBreadcrumb: false,
-    hideInMenu: true,// 隐藏菜单中的路由
+    hideInMenu: true, // 隐藏菜单中的路由
     menuRender: false,
     icon: 'search',
     component: './Search',
@@ -124,32 +124,32 @@ export default [
     path: '/rank/list',
     name: 'rank.list',
     icon: 'trophy',
-    component: './Admin',
+    // component: './Admin',
     routes: [
       {
         path: '/rank/list/total',
         name: 'total',
-        component: './Home',
+        component: './Rank',
       },
       {
         path: '/rank/list/weekly',
         name: 'weekly',
-        component: './Home',
+        component: './Rank',
       },
       {
         path: '/rank/list/blog',
         name: 'blog',
-        component: './Home',
+        component: './Rank',
       },
       {
         path: '/rank/list/content',
         name: 'content',
-        component: './Home',
+        component: './Rank',
       },
       {
         path: '/rank/list/resolve',
         name: 'resolve',
-        component: './Home',
+        component: './Rank',
       },
       {
         component: './404',
@@ -198,10 +198,10 @@ export default [
       {
         path: '/article/edit',
         component: './Article/Editor',
-        headerRender:false, // 当前路由不展示顶栏
-        footerRender:false, // 当前路由不展示页脚
-      }
-    ]
+        headerRender: false, // 当前路由不展示顶栏
+        footerRender: false, // 当前路由不展示页脚
+      },
+    ],
   },
   {
     path: '/schedule-study',
@@ -223,7 +223,6 @@ export default [
         path: '/schedule-study/program',
         name: 'program',
         component: './ScheduleStudy/Program',
-
       },
       {
         component: './404',
@@ -275,7 +274,7 @@ export default [
   {
     path: '/read-book/detail',
     component: './Read/BookDetail',
-    hideInMenu: true,// 隐藏菜单中的路由
+    hideInMenu: true, // 隐藏菜单中的路由
   },
   {
     name: 'about-me',

@@ -1,16 +1,16 @@
-import {GridContent, PageContainer} from "@ant-design/pro-layout";
-import {CheckCard} from '@ant-design/pro-card';
-import {Avatar, Button, Card, Col, Form, List, Row, Select, Tag} from "antd";
-import StandardFormRow from "@/pages/Search/Articles/components/StandardFormRow";
-import TagSelect from "@/pages/Search/Articles/components/TagSelect";
-import styles from "@/pages/Search/Articles/style.less";
-import React from "react";
-import {useRequest} from "umi";
-import {queryFakeList3} from "@/pages/Search/Articles/service";
-import ArticleListContent from "@/pages/Search/Articles/components/ArticleListContent";
-import {LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons";
+import { GridContent, PageContainer } from '@ant-design/pro-layout';
+import { CheckCard } from '@ant-design/pro-card';
+import { Avatar, Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
+import StandardFormRow from '@/pages/Search/Articles/components/StandardFormRow';
+import TagSelect from '@/pages/Search/Articles/components/TagSelect';
+import styles from '@/pages/Search/Articles/style.less';
+import React from 'react';
+import { useRequest } from 'umi';
+import { queryFakeList3 } from '@/pages/Search/Articles/service';
+import ArticleListContent from '@/pages/Search/Articles/components/ArticleListContent';
+import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 
-const {Option} = Select;
+const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 15;
 
@@ -59,7 +59,7 @@ const Community = () => {
     },
   };
 
-  const {data, reload, loading, loadMore, loadingMore} = useRequest(
+  const { data, reload, loading, loadMore, loadingMore } = useRequest(
     () => {
       return queryFakeList3({
         count: pageSize,
@@ -87,7 +87,7 @@ const Community = () => {
       >
         {loadingMore ? (
           <span>
-            <LoadingOutlined/> 加载中...
+            <LoadingOutlined /> 加载中...
           </span>
         ) : (
           '加载更多'
@@ -96,7 +96,7 @@ const Community = () => {
     </div>
   );
 
-  const IconText = ({type, text}) => {
+  const IconText = ({ type, text }) => {
     switch (type) {
       case 'star-o':
         return (
@@ -140,8 +140,7 @@ const Community = () => {
   };
 
   return (
-    <PageContainer
-    >
+    <PageContainer>
       <GridContent>
         <Row>
           <Col>
@@ -165,7 +164,7 @@ const Community = () => {
                             size="small"
                           />
                         }
-                        size={"small"}
+                        size={'small'}
                         value="SpringBoot"
                       />
                       <CheckCard
@@ -177,7 +176,7 @@ const Community = () => {
                           />
                         }
                         value="SOFABoot"
-                        size={"small"}
+                        size={'small'}
                       />
                       <CheckCard
                         title="前端开发"
@@ -187,7 +186,7 @@ const Community = () => {
                             size="small"
                           />
                         }
-                        size={"small"}
+                        size={'small'}
                         value="NodeJS"
                       />
                       <CheckCard
@@ -198,7 +197,7 @@ const Community = () => {
                             size="small"
                           />
                         }
-                        size={"small"}
+                        size={'small'}
                         value="SpringBoot"
                       />
                       <CheckCard
@@ -209,7 +208,7 @@ const Community = () => {
                             size="small"
                           />
                         }
-                        size={"small"}
+                        size={'small'}
                         value="SpringBoot"
                       />
                       <CheckCard
@@ -220,7 +219,7 @@ const Community = () => {
                             size="small"
                           />
                         }
-                        size={"small"}
+                        size={'small'}
                         value="SpringBoot"
                       />
                       <CheckCard
@@ -231,7 +230,7 @@ const Community = () => {
                             size="small"
                           />
                         }
-                        size={"small"}
+                        size={'small'}
                         value="SpringBoot"
                       />
                     </CheckCard.Group>
@@ -290,7 +289,7 @@ const Community = () => {
                           style={{
                             maxWidth: 200,
                             width: '100%',
-                            color: "blue"
+                            color: 'blue',
                           }}
                         >
                           <Option value="complex_order">综合排序</Option>
@@ -307,7 +306,7 @@ const Community = () => {
                           style={{
                             maxWidth: 200,
                             width: '100%',
-                            color: "blue"
+                            color: 'blue',
                           }}
                         >
                           <Option value="all_date">时间不限</Option>
@@ -326,7 +325,7 @@ const Community = () => {
                           style={{
                             maxWidth: 200,
                             width: '100%',
-                            color: "blue"
+                            color: 'blue',
                           }}
                         >
                           <Option value="level_1">一级及以上博主</Option>
@@ -362,11 +361,11 @@ const Community = () => {
                   <List.Item
                     key={item.id}
                     actions={[
-                      <IconText key="star" type="star-o" text={item.star}/>,
-                      <IconText key="like" type="like-o" text={item.like}/>,
-                      <IconText key="message" type="message" text={item.message}/>,
+                      <IconText key="star" type="star-o" text={item.star} />,
+                      <IconText key="like" type="like-o" text={item.like} />,
+                      <IconText key="message" type="message" text={item.message} />,
                     ]}
-                    extra={<div className={styles.listItemExtra}/>}
+                    extra={<div className={styles.listItemExtra} />}
                   >
                     <List.Item.Meta
                       title={
@@ -376,13 +375,13 @@ const Community = () => {
                       }
                       description={
                         <span>
-                    <Tag>Ant Design</Tag>
-                    <Tag>设计语言</Tag>
-                    <Tag>蚂蚁金服</Tag>
-                  </span>
+                          <Tag>Ant Design</Tag>
+                          <Tag>设计语言</Tag>
+                          <Tag>蚂蚁金服</Tag>
+                        </span>
                       }
                     />
-                    <ArticleListContent data={item}/>
+                    <ArticleListContent data={item} />
                   </List.Item>
                 )}
               />
@@ -392,6 +391,6 @@ const Community = () => {
       </GridContent>
     </PageContainer>
   );
-}
+};
 
 export default Community;
