@@ -81,7 +81,7 @@ export default [
     name: 'search',
     hideChildrenInMenu: true,
     hideInBreadcrumb: false,
-    hideInMenu: true,// 隐藏菜单中的路由
+    hideInMenu: true, // 隐藏菜单中的路由
     menuRender: false,
     icon: 'search',
     component: './Search',
@@ -160,22 +160,20 @@ export default [
     path: '/talk',
     name: 'talk',
     icon: 'message',
-    component: './Admin',
+    // component: './Talk',
     routes: [
-      {
-        path: '/talk/blink',
-        name: 'blink',
-        component: './Home',
-      },
       {
         path: '/talk/topic',
         name: 'topic',
-        component: './Home',
+        component: './Talk/Topic',
       },
       {
-        path: '/talk/advice',
-        name: 'advice',
-        component: './Home',
+        path: '/talk/topic/activities',
+        component: './Talk/Topic/ActivitiesPage',
+      },
+      {
+        path: '/talk/topic/detail',
+        component: './Talk/Topic/DetailPage',
       },
       {
         component: './404',
@@ -198,10 +196,10 @@ export default [
       {
         path: '/article/edit',
         component: './Article/Editor',
-        headerRender:false, // 当前路由不展示顶栏
-        footerRender:false, // 当前路由不展示页脚
-      }
-    ]
+        headerRender: false, // 当前路由不展示顶栏
+        footerRender: false, // 当前路由不展示页脚
+      },
+    ],
   },
   {
     path: '/schedule-study',
@@ -223,7 +221,6 @@ export default [
         path: '/schedule-study/program',
         name: 'program',
         component: './ScheduleStudy/Program',
-
       },
       {
         component: './404',
@@ -275,7 +272,7 @@ export default [
   {
     path: '/read-book/detail',
     component: './Read/BookDetail',
-    hideInMenu: true,// 隐藏菜单中的路由
+    hideInMenu: true, // 隐藏菜单中的路由
   },
   {
     name: 'about-me',
