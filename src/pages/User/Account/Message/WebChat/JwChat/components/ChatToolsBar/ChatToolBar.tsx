@@ -2,15 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import style from './style.module.css';
 import EmojiPopover from '../EmojiPopover/EmojiPopover';
+
 // import ImgPopover from '../ImgPopover/ImgPopover'
 
 interface IProps {
   tools?: any[];
   onEmojiSelect?: Function;
-  onImage?: Function;
+  // onImage?: Function;
 }
 
-export default function ChatToolBar({ tools = [], onEmojiSelect, onImage }: IProps) {
+export default function ChatToolBar({
+  tools = [],
+  onEmojiSelect,
+}: // , onImage
+IProps) {
   return (
     <div className={style.content}>
       {typeof onEmojiSelect === 'function' && <EmojiPopover onSelect={onEmojiSelect} />}
@@ -23,5 +28,5 @@ export default function ChatToolBar({ tools = [], onEmojiSelect, onImage }: IPro
 ChatToolBar.propTypes = {
   tools: PropTypes.array,
   onEmojiSelect: PropTypes.func,
-  onImage: PropTypes.func.isRequired,
+  // onImage: PropTypes.func.isRequired,
 };
