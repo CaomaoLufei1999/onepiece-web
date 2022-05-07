@@ -1,33 +1,32 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import style from './style.module.css'
-import EmojiPopover from '../EmojiPopover/EmojiPopover'
-import ImgPopover from '../ImgPopover/ImgPopover'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import style from './style.module.css';
+import EmojiPopover from '../EmojiPopover/EmojiPopover';
+
+// import ImgPopover from '../ImgPopover/ImgPopover'
 
 interface IProps {
-  tools?: any[]
-  onEmojiSelect?: Function
-  onImage?: Function
+  tools?: any[];
+  onEmojiSelect?: Function;
+  // onImage?: Function;
 }
 
 export default function ChatToolBar({
   tools = [],
   onEmojiSelect,
-  onImage,
-}: IProps) {
+}: // , onImage
+IProps) {
   return (
     <div className={style.content}>
-      {typeof onEmojiSelect === 'function' && (
-        <EmojiPopover onSelect={onEmojiSelect} />
-      )}
-      {typeof onImage === 'function' && <ImgPopover onImage={onImage} />}
-      {tools.map((tool) => tool)}
+      {typeof onEmojiSelect === 'function' && <EmojiPopover onSelect={onEmojiSelect} />}
+      {/* {typeof onImage === 'function' && <ImgPopover onImage={onImage} />}
+      {tools.map((tool) => tool)} */}
     </div>
-  )
+  );
 }
 
 ChatToolBar.propTypes = {
   tools: PropTypes.array,
   onEmojiSelect: PropTypes.func,
-  onImage: PropTypes.func.isRequired,
-}
+  // onImage: PropTypes.func.isRequired,
+};
