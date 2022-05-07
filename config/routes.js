@@ -165,22 +165,20 @@ export default [
     path: '/talk',
     name: 'talk',
     icon: 'message',
-    component: './Admin',
+    // component: './Talk',
     routes: [
-      {
-        path: '/talk/blink',
-        name: 'blink',
-        component: './Home',
-      },
       {
         path: '/talk/topic',
         name: 'topic',
-        component: './Home',
+        component: './Talk/Topic',
       },
       {
-        path: '/talk/advice',
-        name: 'advice',
-        component: './Home',
+        path: '/talk/topic/activities',
+        component: './Talk/Topic/ActivitiesPage',
+      },
+      {
+        path: '/talk/topic/detail',
+        component: './Talk/Topic/DetailPage',
       },
       {
         component: './404',
