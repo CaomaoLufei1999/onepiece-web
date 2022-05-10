@@ -32,12 +32,13 @@ const DomainContentList = () => {
   const [data, setData] = useState([]);
   let rankName = ['积分总榜', '作者周榜', '博客热榜', '领域内容榜单', '解题作者榜单'];
 
+  let count = 0;
   const loadMoreData = () => {
     if (loading) {
       return;
     }
     setLoading(true);
-    fetch('http://localhost:3000/results')
+    fetch(`http://localhost:3000/rank_data_domain?id_gte=${count * 10}&id_lte=${(count + 1) * 10}`)
       .then((res) => res.json())
       .then((body) => {
         setData([...data, ...body]);
@@ -46,6 +47,7 @@ const DomainContentList = () => {
       .catch(() => {
         setLoading(false);
       });
+    count++;
   };
 
   useEffect(() => {
@@ -82,17 +84,16 @@ const DomainContentList = () => {
                 {index + 1}
               </text>
               <List.Item.Meta
-                avatar={
-                  <Avatar src={item.picture.large} style={{ height: '60px', width: '60px' }} />
-                }
+                avatar={<Avatar src={item.picture} style={{ height: '60px', width: '60px' }} />}
                 title={
                   <a href="https://ant.design" style={{ fontSize: '18px' }}>
-                    {item.name.first}
+                    {item.name}
                   </a>
                 }
                 description={
                   <text>
-                    粉丝数 130000 &nbsp;&nbsp;&nbsp;获赞 343434&nbsp;&nbsp;&nbsp; 博客积分 1332323
+                    粉丝数 {item.concern} &nbsp;&nbsp;&nbsp;获赞 {item.praise}
+                    &nbsp;&nbsp;&nbsp; 博客积分 {item.integral}
                   </text>
                 }
               />

@@ -38,12 +38,14 @@ const PointsList = () => {
     console.log(key);
     loadMoreData(key);
   }
+
+  let count = 0;
   const loadMoreData = (key = 1) => {
     if (loading) {
       return;
     }
     setLoading(true);
-    fetch(`http://localhost:3000/results?type=${key}`)
+    fetch(`http://localhost:3000/rank_data_point?classify=${key}&limit=1`)
       .then((res) => res.json())
       .then((body) => {
         setData([...body]);
@@ -52,6 +54,7 @@ const PointsList = () => {
       .catch(() => {
         setLoading(false);
       });
+    count++;
   };
 
   useEffect(() => {
@@ -123,7 +126,10 @@ const PointsList = () => {
                   </a>
                 }
                 description={
-                  <text>浏览 12323&nbsp;&nbsp;&nbsp; 评论 234 &nbsp;&nbsp;&nbsp;收藏 133</text>
+                  <text>
+                    浏览 {item.browse}&nbsp;&nbsp;&nbsp; 评论 {item.comment} &nbsp;&nbsp;&nbsp;收藏
+                    {item.collection}
+                  </text>
                 }
               />
               <Button

@@ -93,8 +93,8 @@ const AuthorList = () => {
                 }
                 description={
                   <text>
-                    粉丝数 {item.concern} &nbsp;&nbsp;&nbsp;获赞 {item.praise}&nbsp;&nbsp;&nbsp;
-                    博客积分 {item.integral}
+                    粉丝数 {item.concern} &nbsp;&nbsp;&nbsp;获赞 {item.praise}
+                    &nbsp;&nbsp;&nbsp; 博客积分 {item.integral}
                   </text>
                 }
               />

@@ -15,19 +15,58 @@ for (let i = 0; i < 100; i++) {
   let concern = 1000 - i * 9; //关注数
   let praise = 10000 - i * 99; //点赞数
   let integral = 1232329 - 333 * i; //博客积分
-  let title = random.csentence(3, 5);
-  let browse = 1232329 - 333 * i;
-  let comment = rank_data_author.push({
+  let solveNumber = 232 - i * 10;
+  let title = random.csentence(7, 10); //标题
+  let browse = 1232329 - 333 * i; //
+  let comment = 2323 - 12 * i;
+  let collection = 232 - 3 * i;
+  let classify = Math.floor(Math.random() * 10);
+  rank_data_author.push({
     id: i,
+    type: 'author',
     name,
     picture,
     concern,
     praise,
     integral,
   });
+  rank_data_blog.push({
+    id: i,
+    type: 'blog',
+    title,
+    browse,
+    comment,
+    collection,
+  });
+  rank_data_domain.push({
+    id: i,
+    type: 'domain',
+    name,
+    picture,
+    concern,
+    praise,
+    integral,
+  });
+  rank_data_point.push({
+    id: i,
+    type: 'point',
+    title,
+    browse,
+    comment,
+    collection,
+    classify,
+  });
+  rank_data_solve.push({
+    id: i,
+    type: 'solve',
+    name,
+    picture,
+    concern,
+    solveNumber,
+  });
 }
 module.exports = () => {
-  return { rank_data_author };
+  return { rank_data_author, rank_data_blog, rank_data_domain, rank_data_point, rank_data_solve };
 };
 
 // {

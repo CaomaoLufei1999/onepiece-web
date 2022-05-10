@@ -32,13 +32,13 @@ const BlogHotList = () => {
    * */
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-
+  let count = 0;
   const loadMoreData = () => {
     if (loading) {
       return;
     }
     setLoading(true);
-    fetch('http://localhost:3000/results')
+    fetch(`http://localhost:3000/rank_data_blog?id_gte=${count * 10}&id_lte=${(count + 1) * 10}`)
       .then((res) => res.json())
       .then((body) => {
         setData([...data, ...body]);
@@ -47,11 +47,12 @@ const BlogHotList = () => {
       .catch(() => {
         setLoading(false);
       });
+    count++;
   };
 
   useEffect(() => {
     loadMoreData();
-  }, []);
+  });
 
   return (
     <Col className="gutter-row" span={18} style={{ marginTop: '-20px' }}>
@@ -94,11 +95,14 @@ const BlogHotList = () => {
                 // }
                 title={
                   <a href="https://ant.design" style={{ fontSize: '18px' }}>
-                    {item.title}
+                    <text>{item.title}</text>
                   </a>
                 }
                 description={
-                  <text>浏览 12323&nbsp;&nbsp;&nbsp; 评论 234 &nbsp;&nbsp;&nbsp;收藏 133</text>
+                  <text>
+                    浏览&nbsp;{item.browse}&nbsp;&nbsp;&nbsp; 评论&nbsp;{item.comment}
+                    &nbsp;&nbsp;&nbsp;收藏&nbsp;{item.collection}
+                  </text>
                 }
               />
               <Button

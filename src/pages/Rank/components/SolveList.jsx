@@ -33,12 +33,13 @@ const SolveList = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
+  let count = 0;
   const loadMoreData = () => {
     if (loading) {
       return;
     }
     setLoading(true);
-    fetch('http://localhost:3000/results')
+    fetch(`http://localhost:3000/rank_data_solve?id_gte=${count * 10}&id_lte=${(count + 1) * 10}`)
       .then((res) => res.json())
       .then((body) => {
         setData([...data, ...body]);
@@ -47,6 +48,7 @@ const SolveList = () => {
       .catch(() => {
         setLoading(false);
       });
+    count++;
   };
 
   useEffect(() => {
@@ -83,15 +85,17 @@ const SolveList = () => {
                 {index + 1}
               </text>
               <List.Item.Meta
-                avatar={
-                  <Avatar src={item.picture.large} style={{ height: '60px', width: '60px' }} />
-                }
+                avatar={<Avatar src={item.picture} style={{ height: '60px', width: '60px' }} />}
                 title={
                   <a href="https://ant.design" style={{ fontSize: '18px' }}>
-                    {item.name.first}
+                    {item.name}
                   </a>
                 }
-                description={<text>粉丝数 130000 &nbsp;&nbsp;&nbsp;解题数 34343</text>}
+                description={
+                  <text>
+                    粉丝数 {item.concern} &nbsp;&nbsp;&nbsp;解题数 {item.solveNumber}
+                  </text>
+                }
               />
               <Button
                 type="link"
