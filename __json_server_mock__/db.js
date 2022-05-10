@@ -9,6 +9,15 @@ let rank_data_domain = [];
 let rank_data_point = [];
 let rank_data_solve = [];
 
+/**
+ * =========================================START==================================================
+ */
+
+// TODO data
+
+/**
+ * ===========================================END================================================
+ */
 for (let i = 0; i < 100; i++) {
   let name = random.cname(); // 随机中文名字
   let picture = 'https://randomuser.me/api/portraits/women/27.jpg'; //固定一个头像
