@@ -39,7 +39,9 @@ const AuthorList = () => {
       return;
     }
     setLoading(true);
-    fetch(`http://localhost:3000/rank_data_author?id_gte=${count * 10}&id_lte=${(count + 1) * 10}`)
+    fetch(
+      `http://localhost:3000/rank_data_author?id_gte=${count * 10}&id_lte=${(count + 1) * 10 - 1}`,
+    )
       .then((res) => res.json())
       .then((body) => {
         setData([...data, ...body]);

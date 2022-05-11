@@ -1,14 +1,13 @@
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { CheckCard } from '@ant-design/pro-card';
-import { Avatar, Button, Card, Col, Form, List, Row, Select, Tag } from 'antd';
+import { Avatar, Button, Card, Col, Form, List, Row, Select, Tag, Skeleton, Divider } from 'antd';
 import StandardFormRow from '@/pages/Search/Articles/components/StandardFormRow';
 import TagSelect from '@/pages/Search/Articles/components/TagSelect';
 import styles from '@/pages/Search/Articles/style.less';
-import React from 'react';
-import { useRequest } from 'umi';
-import { queryFakeList3 } from '@/pages/Search/Articles/service';
+import React, { useState, useEffect } from 'react';
 import ArticleListContent from '@/pages/Search/Articles/components/ArticleListContent';
 import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -16,34 +15,54 @@ const pageSize = 15;
 
 const Community = () => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [owners, setOwners] = useState([]);
+  let count = 0;
+  const loadMoreData = () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    fetch(
+      `http://localhost:3000/Community_list?id_gte=${count * 10}&id_lte=${(count + 1) * 10 - 1}`,
+    )
+      .then((res) => res.json())
+      .then((body) => {
+        setData([...data, ...body]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+    count++;
+  };
+  const loadOwnersData = () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    fetch('http://localhost:3000/owners')
+      .then((res) => res.json())
+      .then((body) => {
+        setOwners([...body]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    loadMoreData();
+    loadOwnersData();
+  }, []);
+
   const setOwner = () => {
     form.setFieldsValue({
       owner: ['wzj'],
     });
   };
-
-  const owners = [
-    {
-      id: 'wzj',
-      name: '我自己',
-    },
-    {
-      id: 'wjh',
-      name: '吴家豪',
-    },
-    {
-      id: 'zxx',
-      name: '周星星',
-    },
-    {
-      id: 'zly',
-      name: '赵丽颖',
-    },
-    {
-      id: 'ym',
-      name: '姚明',
-    },
-  ];
 
   const formItemLayout = {
     wrapperCol: {
@@ -58,43 +77,6 @@ const Community = () => {
       },
     },
   };
-
-  const { data, reload, loading, loadMore, loadingMore } = useRequest(
-    () => {
-      return queryFakeList3({
-        count: pageSize,
-      });
-    },
-    {
-      loadMore: true,
-    },
-  );
-  const list = data?.list || [];
-
-  const loadMoreDom = list.length > 0 && (
-    <div
-      style={{
-        textAlign: 'center',
-        marginTop: 16,
-      }}
-    >
-      <Button
-        onClick={loadMore}
-        style={{
-          paddingLeft: 48,
-          paddingRight: 48,
-        }}
-      >
-        {loadingMore ? (
-          <span>
-            <LoadingOutlined /> 加载中...
-          </span>
-        ) : (
-          '加载更多'
-        )}
-      </Button>
-    </div>
-  );
 
   const IconText = ({ type, text }) => {
     switch (type) {
@@ -151,7 +133,7 @@ const Community = () => {
                 initialValues={{
                   owner: ['wjh', 'zxx'],
                 }}
-                onValuesChange={reload}
+                // onValuesChange={reload}
               >
                 <StandardFormRow>
                   <Form.Item>
@@ -350,41 +332,50 @@ const Community = () => {
                 padding: '8px 32px 32px 32px',
               }}
             >
-              <List
-                size="large"
-                loading={loading}
-                rowKey="id"
-                itemLayout="vertical"
-                loadMore={loadMoreDom}
-                dataSource={list}
-                renderItem={(item) => (
-                  <List.Item
-                    key={item.id}
-                    actions={[
-                      <IconText key="star" type="star-o" text={item.star} />,
-                      <IconText key="like" type="like-o" text={item.like} />,
-                      <IconText key="message" type="message" text={item.message} />,
-                    ]}
-                    extra={<div className={styles.listItemExtra} />}
-                  >
-                    <List.Item.Meta
-                      title={
-                        <a className={styles.listItemMetaTitle} href={item.href}>
-                          {item.title}
-                        </a>
-                      }
-                      description={
-                        <span>
-                          <Tag>Ant Design</Tag>
-                          <Tag>设计语言</Tag>
-                          <Tag>蚂蚁金服</Tag>
-                        </span>
-                      }
-                    />
-                    <ArticleListContent data={item} />
-                  </List.Item>
-                )}
-              />
+              <InfiniteScroll
+                dataLength={data.length}
+                next={loadMoreData}
+                hasMore={data.length < 1000}
+                loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+                endMessage={<Divider plain>没有更多了！！！</Divider>}
+                scrollableTarget="scrollableDiv"
+              >
+                <List
+                  size="large"
+                  // loading={loading}
+                  rowKey="id"
+                  itemLayout="vertical"
+                  // loadMore={loadMoreDom}
+                  dataSource={data}
+                  renderItem={(item) => (
+                    <List.Item
+                      key={item.id}
+                      actions={[
+                        <IconText key="star" type="star-o" text={item.star} />,
+                        <IconText key="like" type="like-o" text={item.like} />,
+                        <IconText key="message" type="message" text={item.message} />,
+                      ]}
+                      extra={<div className={styles.listItemExtra} />}
+                    >
+                      <List.Item.Meta
+                        title={
+                          <a className={styles.listItemMetaTitle} href={item.href}>
+                            {item.title}
+                          </a>
+                        }
+                        description={
+                          <span>
+                            <Tag>Ant Design</Tag>
+                            <Tag>设计语言</Tag>
+                            <Tag>蚂蚁金服</Tag>
+                          </span>
+                        }
+                      />
+                      <ArticleListContent data={item} />
+                    </List.Item>
+                  )}
+                />
+              </InfiniteScroll>
             </Card>
           </Col>
         </Row>

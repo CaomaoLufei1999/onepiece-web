@@ -18,21 +18,22 @@ const TopicInfo = () => {
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [action, setAction] = useState(null);
-
+  let count = 0;
   const loadMoreData = () => {
     if (loading) {
       return;
     }
     setLoading(true);
-    fetch('https://randomuser.me/api/?results=20&inc=name,gender,email,nat,picture&noinfo')
+    fetch(`http://localhost:3000/topic_info?id_gte=${count * 20}&id_lte=${(count + 1) * 20 - 1}`)
       .then((res) => res.json())
       .then((body) => {
-        setData([...data, ...body.results]);
+        setData([...data, ...body]);
         setLoading(false);
       })
       .catch(() => {
         setLoading(false);
       });
+    count++;
   };
 
   useEffect(() => {
