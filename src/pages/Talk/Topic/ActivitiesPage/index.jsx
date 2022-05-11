@@ -6,21 +6,24 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 const ActivitiesPage = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-
+  let count = 0;
   const loadMoreData = () => {
     if (loading) {
       return;
     }
     setLoading(true);
-    fetch('https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo')
+    fetch(
+      `http://localhost:3000/topic_activity?id_gte=${count * 10}&id_lte=${(count + 1) * 10 - 1}`,
+    )
       .then((res) => res.json())
       .then((body) => {
-        setData([...data, ...body.results]);
+        setData([...data, ...body]);
         setLoading(false);
       })
       .catch(() => {
         setLoading(false);
       });
+    count++;
   };
 
   useEffect(() => {
