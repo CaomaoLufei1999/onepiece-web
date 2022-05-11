@@ -225,6 +225,7 @@ export default [
       {
         path: '/schedule-study/program',
         name: 'program',
+        hideInMenu: true, //隐藏程序场景题
         component: './ScheduleStudy/Program',
       },
       {
@@ -236,6 +237,7 @@ export default [
     path: '/knowledge-tree',
     name: 'knowledge-tree',
     icon: 'cluster',
+    hideInMenu: true, // 隐藏知识树
     component: './Admin',
     routes: [
       {

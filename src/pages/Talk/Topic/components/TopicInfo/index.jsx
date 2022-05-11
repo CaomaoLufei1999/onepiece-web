@@ -1,43 +1,26 @@
-import React, { useState, useEffect, createElement } from 'react';
+import React, { useState, createElement } from 'react';
 import moment from 'moment';
-import { List, Avatar, Button, Card, Comment, Tooltip, Skeleton, Divider } from 'antd';
+import { List, Avatar, Button, Card, Comment, Tooltip, Skeleton, Divider, Row } from 'antd';
 import {
   LikeOutlined,
   MessageOutlined,
   LikeFilled,
   DislikeFilled,
   DislikeOutlined,
+  MessageFilled,
+  ShareAltOutlined,
+  RightOutlined,
 } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import TextEditor from '../TextEditor';
+import { GridContent } from '@ant-design/pro-layout';
 
-const TopicInfo = () => {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [showComment, setShowComment] = useState(false);
+const TopicInfo = (props) => {
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
+  const [isComment, setIsComment] = useState(false);
+  const [isReply, setIsReply] = useState(false);
   const [action, setAction] = useState(null);
-
-  const loadMoreData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    fetch('https://randomuser.me/api/?results=20&inc=name,gender,email,nat,picture&noinfo')
-      .then((res) => res.json())
-      .then((body) => {
-        setData([...data, ...body.results]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    loadMoreData();
-  }, []);
 
   // 赞
   const like = () => {
@@ -63,15 +46,58 @@ const TopicInfo = () => {
     }
   };
 
-  // 评论
+  // 回复
   const reply = () => {
-    setShowComment(!showComment);
+    setIsReply(!isReply);
   };
 
-  const actions = [
+  // 查看评论
+  const checkComment = (obj) => {
+    // setIsComment(!isComment);
+    console.log(this);
+    // console.log(obj.parentNode.parentNode.id);
+    // if (e.hasClass('showComment')) {
+    //   e.removeClass('showComment');
+    // } else {
+    //   e.addClass('showComment');
+    // }
+  };
+
+  // 分享
+  const share = () => {
+    alert('分享');
+  };
+
+  // 跳转至详情页
+  const toDetailPage = () => {
+    window.location.href = window.location.pathname + '/detail';
+  };
+
+  // List 组件所需的资源
+  const actionsOne = [
     <Tooltip key="comment-basic-like" title="点赞">
       <span onClick={like}>
         {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
+        <span>{likes}</span>
+      </span>
+    </Tooltip>,
+    <Tooltip key="comment-basic-comment" title="查看评论">
+      <span onClick={(e) => checkComment(e)} style={{ cursor: 'pointer' }}>
+        {createElement(isComment === true ? MessageFilled : MessageOutlined)}
+        评论数
+      </span>
+    </Tooltip>,
+    <Tooltip key="comment-basic-share" title="分享">
+      <span onClick={share} style={{ cursor: 'pointer' }}>
+        {createElement(ShareAltOutlined)}
+        分享
+      </span>
+    </Tooltip>,
+  ];
+  const actionsTwo = [
+    <Tooltip key="comment-basic-like" title="点赞">
+      <span onClick={like}>
+        {React.createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
         <span>{likes}</span>
       </span>
     </Tooltip>,
@@ -81,7 +107,7 @@ const TopicInfo = () => {
         <span>{dislikes}</span>
       </span>
     </Tooltip>,
-    <Tooltip key="comment-basic-dislike" title="评论">
+    <Tooltip key="comment-basic-dislike" title="回复">
       <span onClick={reply}>
         {React.createElement(MessageOutlined)}
         <span>回复</span>
@@ -92,6 +118,7 @@ const TopicInfo = () => {
   const listData = [];
   for (let i = 0; i < 5; i++) {
     listData.push({
+      id: i,
       href: 'https://ant.design',
       title: `ant design part ${i}`,
       avatar: 'https://joeschmoe.io/api/v1/random',
@@ -99,51 +126,61 @@ const TopicInfo = () => {
         'Ant Design, a design language for background applications, is refined by Ant UED Team.',
       content:
         'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+      comment: false,
     });
   }
 
   return (
-    <Card>
+    <GridContent>
       <InfiniteScroll
-        dataLength={data.length}
-        next={loadMoreData}
-        hasMore={data.length < 10}
+        dataLength={listData.length}
+        hasMore={listData.length < 10}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-        endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+        endMessage={<Divider plain>没有更多了~~ 🤐</Divider>}
         scrollableTarget="scrollableDiv"
       >
-        <List
-          itemLayout="vertical"
-          size="large"
-          dataSource={data}
-          renderItem={(item) => (
-            <List.Item key={item.id} actions={actions} extra={<Button type="primary">关注</Button>}>
-              <Comment
-                author={
-                  <a>
-                    <strong>hello world</strong>
-                  </a>
-                }
-                avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-                content={
-                  <p>
-                    We supply a series of design principles, practical patterns and high quality
-                    design resources (Sketch and Axure), to help people create their product
-                    prototypes beautifully and efficiently.
-                  </p>
-                }
-                datetime={
-                  <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-                    <span>{moment().fromNow()}</span>
-                  </Tooltip>
-                }
-              />
-              {showComment === false ? null : (
-                <div>
-                  {/* 自己评论 */}
-                  <TextEditor />
+        <Row justify={[10, 10]}>
+          <List
+            itemLayout="vertical"
+            size="large"
+            dataSource={listData}
+            renderItem={(item) => (
+              <Card className={item.id}>
+                <List.Item
+                  key={item.id}
+                  className="comment"
+                  actions={actionsOne}
+                  extra={<Button type="primary">关注</Button>}
+                >
+                  <Comment
+                    author={
+                      <a>
+                        <strong>{item.title}</strong>
+                      </a>
+                    }
+                    avatar={<Avatar src={item.avatar} alt="Han Solo" />}
+                    content={<p>{item.content}</p>}
+                    datetime={
+                      <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+                        <span>{moment().fromNow()}</span>
+                      </Tooltip>
+                    }
+                  />
+                </List.Item>
 
-                  {/* 他人评论 */}
+                {/*自己评论*/}
+                {<TextEditor isAvatar={true} isShow={!!document.querySelector('showComment')} />}
+
+                {document.querySelector('showComment') === null ? null : props.showComment ===
+                  false ? (
+                  <Row>
+                    <Button onClick={toDetailPage}>
+                      查看更多
+                      <RightOutlined />
+                    </Button>
+                  </Row>
+                ) : (
+                  // 展示他人评论
                   <List
                     className="comment-list"
                     header={`您有 ${data.length} 条评论`}
@@ -151,7 +188,7 @@ const TopicInfo = () => {
                     dataSource={listData}
                     renderItem={(item) => (
                       <Comment
-                        actions={actions}
+                        actions={actionsTwo}
                         title={<a href="https://ant.design">你好</a>}
                         author={<strong>姓名</strong>}
                         avatar={<Avatar />}
@@ -162,16 +199,18 @@ const TopicInfo = () => {
                           </span>
                         }
                         datetime={<span>2022-05-04</span>}
-                      />
+                      >
+                        {isReply === true ? <TextEditor isAvatar={true} /> : null}
+                      </Comment>
                     )}
                   />
-                </div>
-              )}
-            </List.Item>
-          )}
-        />
+                )}
+              </Card>
+            )}
+          />
+        </Row>
       </InfiniteScroll>
-    </Card>
+    </GridContent>
   );
 };
 
