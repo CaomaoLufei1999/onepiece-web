@@ -3,24 +3,32 @@ import { Button, Comment, Avatar, Input, Row, Col, Space, Select } from 'antd';
 import { ManOutlined, SmileOutlined, NotificationOutlined } from '@ant-design/icons';
 import EmojiPicker from '../EmojiPicker';
 
+let tempTextAreaData = '';
+
 const TextEditor = (props) => {
   // 保存输入框的内容
   const [chatContent, setChatContent] = useState('');
   // 标识表情包是否显示
   const [showEmojiModal, setShowEmojiModal] = useState(false);
 
-  // 选中表情的回调函数
-  const searchEmoji = (emoji, event) => {
-    console.log(emoji);
-    console.log(chatContent.length, chatContent);
-    const newChatContent = chatContent.length > 0 ? chatContent + emoji.native : emoji.native;
-    setChatContent(newChatContent);
-  };
-
   // 输入框内容更改的回调函数
   const onChatContentChange = (value) => {
     setChatContent(value);
-    console.log(chatContent, chatContent.length);
+    tempTextAreaData = value;
+    console.log("输入框内容：",chatContent,"，输入框内容长度：", chatContent.length);
+    console.log("输入框内容：",tempTextAreaData,"，输入框内容长度：", tempTextAreaData.length);
+  };
+
+  // 选中表情的回调函数
+  const searchEmoji = (emoji, event) => {
+    console.log("新增加的表情：",emoji);
+    console.log("临时文本框数据：：",tempTextAreaData);
+    console.log("表情内容长度：",chatContent.length,"，表情内容：", chatContent);
+    // const newChatContent = chatContent.length > 0 ? chatContent + emoji.native : emoji.native;
+    const newChatContent = tempTextAreaData.length > 0 ? tempTextAreaData + emoji.native : emoji.native;
+    console.log("新增表情后的内容长度：",newChatContent.length,"，表情内容：", newChatContent);
+    tempTextAreaData = newChatContent;
+    setChatContent(newChatContent);
   };
 
   // 表情包展示
