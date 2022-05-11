@@ -1,4 +1,4 @@
-import React, { useState, createElement } from 'react';
+import React, { useState, createElement, useEffect } from 'react';
 import moment from 'moment';
 import { List, Avatar, Button, Card, Comment, Tooltip, Skeleton, Divider, Row } from 'antd';
 import {
@@ -21,7 +21,7 @@ const TopicInfo = (props) => {
   const [isComment, setIsComment] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const [action, setAction] = useState(null);
-
+  const [flag, setFlag] = useState(false);
   // 赞
   const like = () => {
     let num = likes;
@@ -52,10 +52,15 @@ const TopicInfo = (props) => {
   };
 
   // 查看评论
-  const checkComment = (obj) => {
-    // setIsComment(!isComment);
-    console.log(this);
-    // console.log(obj.parentNode.parentNode.id);
+  const checkComment = (e) => {
+    console.log(e.target);
+    const div = e.parentNode.parentNode.parentNode.parentNode.parentNode;
+    if (div.id.indexOf('commentId')) {
+      div.classList.remove('commentId');
+    } else {
+      div.classList.add('commentId');
+    }
+    console.log(div);
     // if (e.hasClass('showComment')) {
     //   e.removeClass('showComment');
     // } else {
@@ -82,7 +87,7 @@ const TopicInfo = (props) => {
       </span>
     </Tooltip>,
     <Tooltip key="comment-basic-comment" title="查看评论">
-      <span onClick={(e) => checkComment(e)} style={{ cursor: 'pointer' }}>
+      <span id="commentId" onClick={(e) => checkComment(e)} style={{ cursor: 'pointer' }}>
         {createElement(isComment === true ? MessageFilled : MessageOutlined)}
         评论数
       </span>
@@ -144,69 +149,103 @@ const TopicInfo = (props) => {
             itemLayout="vertical"
             size="large"
             dataSource={listData}
-            renderItem={(item) => (
-              <Card className={item.id}>
-                <List.Item
-                  key={item.id}
-                  className="comment"
-                  actions={actionsOne}
-                  extra={<Button type="primary">关注</Button>}
-                >
-                  <Comment
-                    author={
-                      <a>
-                        <strong>{item.title}</strong>
-                      </a>
-                    }
-                    avatar={<Avatar src={item.avatar} alt="Han Solo" />}
-                    content={<p>{item.content}</p>}
-                    datetime={
-                      <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-                        <span>{moment().fromNow()}</span>
-                      </Tooltip>
-                    }
-                  />
-                </List.Item>
+            renderItem={(item) => {
+              let constant = false;
+              return (
+                <Card>
+                  <List.Item
+                    id={item.id}
+                    key={item.id}
+                    className="comment"
+                    actions={[
+                      <Tooltip key="comment-basic-like" title="点赞">
+                        <span onClick={like}>
+                          {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
+                          <span>{likes}</span>
+                        </span>
+                      </Tooltip>,
+                      <Tooltip key="comment-basic-comment" title="查看评论">
+                        {/*<span id='commentId' onClick={e => checkComment(e)} style={{ cursor: 'pointer' }}>*/}
+                        <span
+                          id="commentId"
+                          onClick={() => {
+                            constant = !constant;
+                            setFlag(constant);
+                            console.log('constant', constant);
+                            console.log('flag', flag);
+                          }}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {createElement(isComment === true ? MessageFilled : MessageOutlined)}
+                          评论数
+                        </span>
+                      </Tooltip>,
+                      <Tooltip key="comment-basic-share" title="分享">
+                        <span onClick={share} style={{ cursor: 'pointer' }}>
+                          {createElement(ShareAltOutlined)}
+                          分享
+                        </span>
+                      </Tooltip>,
+                    ]}
+                    extra={<Button type="primary">关注</Button>}
+                  >
+                    <Comment
+                      author={
+                        <a>
+                          <strong>{item.title}</strong>
+                        </a>
+                      }
+                      avatar={<Avatar src={item.avatar} alt="Han Solo" />}
+                      content={<p>{item.content}</p>}
+                      datetime={
+                        <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+                          <span>{moment().fromNow()}</span>
+                        </Tooltip>
+                      }
+                    />
+                  </List.Item>
 
-                {/*自己评论*/}
-                {<TextEditor isAvatar={true} isShow={!!document.querySelector('showComment')} />}
+                  {/*自己评论*/}
+                  {/*{<TextEditor isAvatar={true} isShow={document.getElementById(item.id) && document.getElementById(item.id).className.indexOf('commentId') > -1 ? true : false} />}*/}
+                  {<TextEditor isAvatar={true} isShow={constant} />}
 
-                {document.querySelector('showComment') === null ? null : props.showComment ===
-                  false ? (
-                  <Row>
-                    <Button onClick={toDetailPage}>
-                      查看更多
-                      <RightOutlined />
-                    </Button>
-                  </Row>
-                ) : (
-                  // 展示他人评论
-                  <List
-                    className="comment-list"
-                    header={`您有 ${data.length} 条评论`}
-                    itemLayout="horizontal"
-                    dataSource={listData}
-                    renderItem={(item) => (
-                      <Comment
-                        actions={actionsTwo}
-                        title={<a href="https://ant.design">你好</a>}
-                        author={<strong>姓名</strong>}
-                        avatar={<Avatar />}
-                        content={
-                          <span>
-                            Ant Design, a design language for background applications, is refined by
-                            Ant UED Team
-                          </span>
-                        }
-                        datetime={<span>2022-05-04</span>}
-                      >
-                        {isReply === true ? <TextEditor isAvatar={true} /> : null}
-                      </Comment>
-                    )}
-                  />
-                )}
-              </Card>
-            )}
+                  {/*{document.getElementById(item.id) && document.getElementById(item.id).className.indexOf('commentId') === -1 ? null :*/}
+                  {constant === false ? null : props.showComment === false ? (
+                    <Row>
+                      <Button onClick={toDetailPage}>
+                        查看更多
+                        <RightOutlined />
+                      </Button>
+                    </Row>
+                  ) : (
+                    // 展示他人评论
+                    <List
+                      className="comment-list"
+                      header={`您有 ${data.length} 条评论`}
+                      itemLayout="horizontal"
+                      dataSource={listData}
+                      renderItem={(item) => (
+                        <Comment
+                          actions={actionsTwo}
+                          title={<a href="https://ant.design">你好</a>}
+                          author={<strong>姓名</strong>}
+                          avatar={<Avatar />}
+                          content={
+                            <span>
+                              Ant Design, a design language for background applications, is refined
+                              by Ant UED Team
+                            </span>
+                          }
+                          datetime={<span>2022-05-04</span>}
+                        >
+                          {isReply === true ? <TextEditor isAvatar={true} /> : null}
+                        </Comment>
+                      )}
+                    />
+                  )}
+                </Card>
+              );
+            }}
           />
         </Row>
       </InfiniteScroll>
