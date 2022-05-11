@@ -25,7 +25,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
  * @param fields
  */
 const { TabPane } = Tabs;
-
+let index = 1;
+let count = [0, 0, 0, 0, 0];
 const PointsList = () => {
   /**
    * @en-US International configuration
@@ -35,17 +36,18 @@ const PointsList = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   function callback(key) {
+    index = key;
     console.log(key);
     loadMoreData(key);
   }
-
-  let count = 0;
+  let count = [0, 0, 0, 0, 0, 0];
   const loadMoreData = (key = 1) => {
     if (loading) {
       return;
     }
     setLoading(true);
-    fetch(`http://localhost:3000/rank_data_point?classify=${key}&limit=1`)
+    fetch(`http://localhost:3000/rank_data_point_id_${key}
+    `)
       .then((res) => res.json())
       .then((body) => {
         setData([...body]);
@@ -56,7 +58,26 @@ const PointsList = () => {
       });
     count++;
   };
-
+  const loadMoreData_type = (key = 1) => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    // ?id_gte=${count[key] * 10}&id_lte=${
+    //   (count[key] + 1) * 10 - 1
+    // }
+    fetch(`http://localhost:3000/rank_data_point_id_${key}
+    `)
+      .then((res) => res.json())
+      .then((body) => {
+        setData([...data, ...body]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+    count[key]++;
+  };
   useEffect(() => {
     loadMoreData();
   }, []);
@@ -86,8 +107,8 @@ const PointsList = () => {
       </Tabs>
       <InfiniteScroll
         dataLength={data.length}
-        next={loadMoreData}
-        // hasMore={data.length < 100}
+        // next={loadMoreData_type(index)}
+        hasMore={data.length < 100}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
         endMessage={<Divider plain>榜单只展示前一百名哦！！！🤐</Divider>}
         scrollableTarget="scrollableDiv"

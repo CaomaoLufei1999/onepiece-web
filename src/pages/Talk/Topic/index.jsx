@@ -2,24 +2,47 @@ import { Row, Col, Card, List, Button, Tag } from 'antd';
 import TextEditor from './components/TextEditor';
 import TopicInfo from './components/TopicInfo';
 import UserInfo from './components/UserInfo';
+import React, { useState, useEffect, createElement } from 'react';
 
 const Topic = () => {
-  const data = [
-    { id: 1, title: '你好世界', num: 666 },
-    {
-      id: 2,
-      title: '你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界',
-      num: 666,
-    },
-    { id: 3, title: '你好世界', num: 666 },
-    { id: 4, title: '你好世界', num: 666 },
-    { id: 5, title: '你好世界', num: 666 },
-    { id: 6, title: '你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界', num: 666 },
-    { id: 7, title: '你好世界', num: 666 },
-    { id: 8, title: '你好世界', num: 666 },
-    { id: 9, title: '你好世界', num: 666 },
-    { id: 10, title: '你好世界', num: 666 },
-  ];
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+
+  const loadMoreData = () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    fetch(`http://localhost:3000/topic_data`)
+      .then((res) => res.json())
+      .then((body) => {
+        setData([...body]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    loadMoreData();
+  }, []);
+  // const data = [
+  //   { id: 1, title: '你好世界', num: 666 },
+  //   {
+  //     id: 2,
+  //     title: '你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界',
+  //     num: 666,
+  //   },
+  //   { id: 3, title: '你好世界', num: 666 },
+  //   { id: 4, title: '你好世界', num: 666 },
+  //   { id: 5, title: '你好世界', num: 666 },
+  //   { id: 6, title: '你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界', num: 666 },
+  //   { id: 7, title: '你好世界', num: 666 },
+  //   { id: 8, title: '你好世界', num: 666 },
+  //   { id: 9, title: '你好世界', num: 666 },
+  //   { id: 10, title: '你好世界', num: 666 },
+  // ];
 
   // 跳转至话题专区话题分类列表页
   const ToListPage = (props) => {
