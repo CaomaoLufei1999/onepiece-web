@@ -1,24 +1,20 @@
-import {List, Avatar, Button, Skeleton, Space} from 'antd';
-import React from "react";
-import * as ReactDOM from "react-dom";
-import Home from "@/pages/Home";
-
-const count = 3;
-const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+import { List, Avatar, Button, Skeleton, Space } from 'antd';
+import React from 'react';
+import * as ReactDOM from 'react-dom';
+import Home from '@/pages/Home';
 
 class RecommendUsers extends React.Component {
   state = {
     initLoading: true,
     loading: false,
     data: [],
-    // list: [],
-    goodAuthorList: []
+    goodAuthorList: [],
   };
 
   componentDidMount() {
     fetch('http://localhost:3000/home_good_author_list')
-      .then(res => res.json())
-      .then(body => {
+      .then((res) => res.json())
+      .then((body) => {
         this.setState({
           initLoading: false,
           data: [...body],
@@ -32,8 +28,8 @@ class RecommendUsers extends React.Component {
       loading: true,
     });
     fetch('http://localhost:3000/home_good_author_list')
-      .then(res => res.json())
-      .then(body => {
+      .then((res) => res.json())
+      .then((body) => {
         const data = this.state.data.concat([...body]);
         this.setState(
           {
@@ -52,7 +48,7 @@ class RecommendUsers extends React.Component {
   };
 
   render() {
-    const {initLoading, loading, goodAuthorList} = this.state;
+    const { initLoading, loading, goodAuthorList } = this.state;
     const loadMore =
       !initLoading && !loading ? (
         <div
@@ -73,17 +69,17 @@ class RecommendUsers extends React.Component {
         itemLayout="horizontal"
         loadMore={loadMore}
         dataSource={goodAuthorList}
-        renderItem={item => (
+        renderItem={(item) => (
           <List.Item>
             <Skeleton avatar title={false} loading={item.loading} active>
               <List.Item.Meta
-                avatar={
-                  <Avatar src={item.avatar}/>
-                }
+                avatar={<Avatar src={item.avatar} />}
                 title={
                   <Space>
                     <a href={item.href}>{item.name}</a>
-                    <Button size={"small"} shape={"round"}>关 注</Button>
+                    <Button size={'small'} shape={'round'}>
+                      关 注
+                    </Button>
                   </Space>
                 }
                 description={item.desc}

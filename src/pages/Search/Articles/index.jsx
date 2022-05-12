@@ -75,29 +75,6 @@ const Articles = () => {
     });
   };
 
-  // const owners = [
-  //   {
-  //     id: 'wzj',
-  //     name: '我自己',
-  //   },
-  //   {
-  //     id: 'wjh',
-  //     name: '吴家豪',
-  //   },
-  //   {
-  //     id: 'zxx',
-  //     name: '周星星',
-  //   },
-  //   {
-  //     id: 'zly',
-  //     name: '赵丽颖',
-  //   },
-  //   {
-  //     id: 'ym',
-  //     name: '姚明',
-  //   },
-  // ];
-
   const IconText = ({ type, text }) => {
     switch (type) {
       case 'star-o':

@@ -27,22 +27,6 @@ const Topic = () => {
   useEffect(() => {
     loadMoreData();
   }, []);
-  // const data = [
-  //   { id: 1, title: '你好世界', num: 666 },
-  //   {
-  //     id: 2,
-  //     title: '你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界',
-  //     num: 666,
-  //   },
-  //   { id: 3, title: '你好世界', num: 666 },
-  //   { id: 4, title: '你好世界', num: 666 },
-  //   { id: 5, title: '你好世界', num: 666 },
-  //   { id: 6, title: '你好世界你好世界你好世界你好世界你好世界你好世界你好世界你好世界', num: 666 },
-  //   { id: 7, title: '你好世界', num: 666 },
-  //   { id: 8, title: '你好世界', num: 666 },
-  //   { id: 9, title: '你好世界', num: 666 },
-  //   { id: 10, title: '你好世界', num: 666 },
-  // ];
 
   // 跳转至话题专区话题分类列表页
   const ToListPage = (props) => {
@@ -79,7 +63,7 @@ const Topic = () => {
                       style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
                     >
                       <span>{item.title}</span>
-                      <span>666</span>
+                      <span>{item.num}</span>
                     </div>
                   }
                 />

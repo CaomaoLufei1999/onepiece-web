@@ -1,28 +1,56 @@
-import React from 'react';
-import {StarTwoTone, LikeOutlined, MessageFilled, LoadingOutlined, FireTwoTone, FireFilled} from '@ant-design/icons';
-import {useRequest} from 'umi';
-import {Button, List, Skeleton, Tag} from 'antd';
+import React, { useEffect, useState } from 'react';
+import {
+  StarTwoTone,
+  LikeOutlined,
+  MessageFilled,
+  LoadingOutlined,
+  FireTwoTone,
+  FireFilled,
+} from '@ant-design/icons';
+import { Button, List, Skeleton, Tag } from 'antd';
 import ArticleListContent from './ArticleListContent';
-import {queryFakeList} from '../../service';
 import styles from './index.less';
 
-const pageSize = 8;
-
 const Hot = () => {
-  const {data, reload, loading, loadMore, loadingMore} = useRequest(
-    () => {
-      return queryFakeList({
-        count: pageSize,
+  const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hotList, setHotList] = useState([]);
+  const [data, setData] = useState([]);
+
+  const loadRecommendList = () => {
+    if (loading) {
+      return;
+    }
+    fetch('http://localhost:3000/home_hot_list')
+      .then((res) => res.json())
+      .then((body) => {
+        setHotList([...body]);
+        setData([...body]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
       });
-    },
-    {
-      loadMore: true,
-    },
-  );
+  };
 
-  const list = data?.list || [];
+  useEffect(() => {
+    loadRecommendList();
+  }, []);
 
-  const loadMoreDom = list.length > 0 && (
+  const loadMore = () => {
+    setLoadingMore(true);
+    fetch('http://localhost:3000/home_hot_list')
+      .then((res) => res.json())
+      .then((body) => {
+        const newData = data.concat([...body]);
+        setData(newData);
+        setHotList(newData);
+        setLoadingMore(false);
+        window.dispatchEvent(new Event('resize'));
+      });
+  };
+
+  const loadMoreDom = hotList.length > 0 && (
     <div
       style={{
         textAlign: 'center',
@@ -38,7 +66,7 @@ const Hot = () => {
       >
         {loadingMore ? (
           <span>
-            <LoadingOutlined/> 加载中...
+            <LoadingOutlined /> 加载中...
           </span>
         ) : (
           '加载更多'
@@ -46,12 +74,11 @@ const Hot = () => {
       </Button>
     </div>
   );
-  const IconText = ({icon, text}) => (
+  const IconText = ({ icon, text }) => (
     <span>
       {icon} {text}
     </span>
   ); // 获取tab列表数据
-
 
   return (
     <List
@@ -61,35 +88,40 @@ const Hot = () => {
       loading={loading}
       rowKey="id"
       itemLayout="vertical"
-      dataSource={list}
+      dataSource={hotList}
       renderItem={(item) => (
         <List.Item
           key={item.id}
           actions={[
-            <IconText key="star" icon={<StarTwoTone/>} text={item.star}/>,
-            <IconText key="like" icon={<LikeOutlined/>} text={item.like}/>,
-            <IconText key="message" icon={<MessageFilled/>} text={item.message}/>,
+            <IconText key="star" icon={<StarTwoTone />} text={item.star} />,
+            <IconText key="like" icon={<LikeOutlined />} text={item.like} />,
+            <IconText key="message" icon={<MessageFilled />} text={item.message} />,
           ]}
         >
           <List.Item.Meta
             title={
               <div>
-                <span style={{
-                  marginRight: 5,
-                  color: "gray",
-                  fontSize: "small"
-                }}
+                <span
+                  style={{
+                    marginRight: 5,
+                    color: 'gray',
+                    fontSize: 'small',
+                  }}
                 >
-                  <b>No.<span>100</span></b>
+                  <b>
+                    No.<span>{item.rank}</span>
+                  </b>
                 </span>
                 <a className={styles.listItemMetaTitle} href={item.href}>
                   {item.title}
                 </a>
-                <FireFilled style={{
-                  float: "right",
-                  color: "red",
-                  fontSize: "large"
-                }}/>
+                <FireFilled
+                  style={{
+                    float: 'right',
+                    color: 'red',
+                    fontSize: 'large',
+                  }}
+                />
               </div>
             }
             description={
@@ -100,7 +132,7 @@ const Hot = () => {
               </span>
             }
           />
-          <ArticleListContent data={item}/>
+          <ArticleListContent data={item} />
         </List.Item>
       )}
     />

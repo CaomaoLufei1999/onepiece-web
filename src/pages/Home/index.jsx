@@ -1,14 +1,15 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {GridContent, PageContainer} from '@ant-design/pro-layout';
-import {Avatar, Skeleton, Row, Statistic, Col, Card, Button, Calendar, Badge, List} from 'antd';
+import React, { useState, useRef, useEffect } from 'react';
+import { GridContent, PageContainer } from '@ant-design/pro-layout';
+import { Avatar, Skeleton, Row, Statistic, Col, Card, Button, Calendar, Badge, List } from 'antd';
 import styles from './index.less';
-import RecommendUsers from "@/pages/Home/components/RecommendUsers"
-import {CalendarOutlined, NotificationOutlined, TeamOutlined} from "@ant-design/icons";
-import New from "@/pages/Home/components/New";
-import Recommend from "@/pages/Home/components/Recommend";
-import Hot from "@/pages/Home/components/Hot";
-import Follow from "@/pages/Home/components/Follow";
-import menu from "@/locales/zh-CN/menu";
+import RecommendUsers from '@/pages/Home/components/RecommendUsers';
+import { CalendarOutlined, NotificationOutlined, TeamOutlined } from '@ant-design/icons';
+import New from '@/pages/Home/components/New';
+import News from '@/pages/Home/components/News';
+import Recommend from '@/pages/Home/components/Recommend';
+import Hot from '@/pages/Home/components/Hot';
+import Follow from '@/pages/Home/components/Follow';
+import menu from '@/locales/zh-CN/menu';
 
 function onPanelChange(value, mode) {
   console.log(value, mode);
@@ -39,8 +40,7 @@ const operationTabList = [
           style={{
             fontSize: 14,
           }}
-        >
-        </span>
+        ></span>
       </span>
     ),
   },
@@ -53,8 +53,7 @@ const operationTabList = [
           style={{
             fontSize: 14,
           }}
-        >
-        </span>
+        ></span>
       </span>
     ),
   },
@@ -67,8 +66,7 @@ const operationTabList = [
           style={{
             fontSize: 14,
           }}
-        >
-        </span>
+        ></span>
       </span>
     ),
   },
@@ -81,8 +79,7 @@ const operationTabList = [
           style={{
             fontSize: 14,
           }}
-        >
-        </span>
+        ></span>
       </span>
     ),
   },
@@ -95,14 +92,13 @@ const operationTabList = [
           style={{
             fontSize: 14,
           }}
-        >
-        </span>
+        ></span>
       </span>
     ),
   },
 ];
 
-const PageHeaderContent = ({currentUser}) => {
+const PageHeaderContent = ({ currentUser }) => {
   const loading = currentUser && Object.keys(currentUser).length;
 
   if (!loading) {
@@ -120,7 +116,7 @@ const PageHeaderContent = ({currentUser}) => {
   return (
     <div className={styles.pageHeaderContent}>
       <div className={styles.avatar}>
-        <Avatar size="large" src={currentUser.avatar}/>
+        <Avatar size="large" src={currentUser.avatar} />
       </div>
       <div className={styles.content}>
         <div className={styles.contentTitle}>
@@ -136,16 +132,16 @@ const PageHeaderContent = ({currentUser}) => {
   );
 };
 
-const ExtraContent = ({currentUser}) => (
+const ExtraContent = ({ currentUser }) => (
   <div className={styles.extraContent}>
     <div className={styles.statItem}>
-      <Statistic title="文章总数" value={currentUser.articleNum}/>
+      <Statistic title="文章总数" value={currentUser.articleNum} />
     </div>
     <div className={styles.statItem}>
-      <Statistic title="题解总数" value={currentUser.testAnswerNum} suffix="/ 24"/>
+      <Statistic title="题解总数" value={currentUser.testAnswerNum} suffix="/ 24" />
     </div>
     <div className={styles.statItem}>
-      <Statistic title="综合排名" value={currentUser.rank}/>
+      <Statistic title="综合排名" value={currentUser.rank} />
     </div>
   </div>
 );
@@ -156,25 +152,25 @@ const Home = () => {
   const [publicData, setPublicData] = useState([]);
   const [userData, setUserData] = useState({});
 
-  let menuName = "menu.home." + tabKey;
+  let menuName = 'menu.home.' + tabKey;
   const tabName = menu[menuName];
   const renderChildrenByTabKey = (tabValue) => {
     if (tabValue === 'new') {
-      return <New/>;
+      return <New />;
     }
     if (tabValue === 'news') {
-      return <New/>;
+      return <News />;
     }
     if (tabValue === 'recommend') {
-      return <Recommend/>;
+      return <Recommend />;
     }
 
     if (tabValue === 'hot') {
-      return <Hot/>;
+      return <Hot />;
     }
 
     if (tabValue === 'follow') {
-      return <Follow/>;
+      return <Follow />;
     }
     return null;
   };
@@ -233,7 +229,7 @@ const Home = () => {
             articleNum: userData && userData.articleNum,
             testAnswerNum: userData && userData.testAnswerNum,
             testAnswerAllNum: userData && userData.testAnswerAllNum,
-            rank: userData && userData.rank
+            rank: userData && userData.rank,
           }}
         />
       }
@@ -259,9 +255,11 @@ const Home = () => {
             <Card
               title={
                 <span>
-                <CalendarOutlined style={{
-                  marginRight: 10,
-                }}/>
+                  <CalendarOutlined
+                    style={{
+                      marginRight: 10,
+                    }}
+                  />
                   日期
                 </span>
               }
@@ -283,9 +281,11 @@ const Home = () => {
             <Card
               title={
                 <span>
-                <NotificationOutlined style={{
-                  marginRight: 10,
-                }}/>
+                  <NotificationOutlined
+                    style={{
+                      marginRight: 10,
+                    }}
+                  />
                   公告
                 </span>
               }
@@ -301,10 +301,10 @@ const Home = () => {
               <List
                 itemLayout="horizontal"
                 dataSource={publicData}
-                renderItem={item => (
+                renderItem={(item) => (
                   <List.Item>
                     <List.Item.Meta
-                      avatar={<Avatar src={item.avatar}/>}
+                      avatar={<Avatar src={item.avatar} />}
                       title={<a href={item.titleHref}>{item.title}</a>}
                       description={
                         <span>
@@ -320,9 +320,11 @@ const Home = () => {
             <Card
               title={
                 <span>
-                <TeamOutlined style={{
-                  marginRight: 10,
-                }}/>
+                  <TeamOutlined
+                    style={{
+                      marginRight: 10,
+                    }}
+                  />
                   优质作者
                 </span>
               }
@@ -335,7 +337,7 @@ const Home = () => {
                 padding: 10,
               }}
             >
-              <RecommendUsers/>
+              <RecommendUsers />
             </Card>
           </Col>
         </Row>

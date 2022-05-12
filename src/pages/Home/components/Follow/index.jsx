@@ -1,14 +1,32 @@
-import React from 'react';
-import {useRequest} from 'umi';
-import {Button, Card, Divider, List, Skeleton, Tag} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Divider, List, Skeleton, Tag } from 'antd';
 import styles from './index.less';
-import Avatar from "antd/es/avatar/avatar";
-import {queryActivities} from "@/pages/Home/components/Follow/service";
+import Avatar from 'antd/es/avatar/avatar';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import moment from "moment";
+import moment from 'moment';
 
 const Follow = () => {
-  const {loading: activitiesLoading, data: activities = []} = useRequest(queryActivities);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+
+  const loadFollowData = () => {
+    if (loading) {
+      return;
+    }
+    fetch('http://localhost:3000/home_follow_data')
+      .then((res) => res.json())
+      .then((body) => {
+        setData([...body]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    loadFollowData();
+  }, []);
 
   const renderActivities = (item) => {
     const events = item.template.split(/@\{([^{}]*)\}/gi).map((key) => {
@@ -25,7 +43,7 @@ const Follow = () => {
     return (
       <List.Item key={item.id}>
         <List.Item.Meta
-          avatar={<Avatar src={item.user.avatar}/>}
+          avatar={<Avatar src={item.user.avatar} />}
           title={
             <span>
               <a className={styles.username}>{item.user.name}</a>
@@ -47,7 +65,7 @@ const Follow = () => {
     <List
       loading={activitiesLoading}
       renderItem={(item) => renderActivities(item)}
-      dataSource={activities}
+      dataSource={data}
       className={styles.activitiesList}
       size="large"
     />

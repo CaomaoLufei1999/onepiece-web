@@ -14,17 +14,19 @@ import TextEditor from '../TextEditor';
 const TopicInfo = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [commentData, setCommentData] = useState([]);
   const [showComment, setShowComment] = useState(false);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [action, setAction] = useState(null);
-  let count = 0;
+  // let count = 0;
   const loadMoreData = () => {
     if (loading) {
       return;
     }
     setLoading(true);
-    fetch(`http://localhost:3000/topic_info?id_gte=${count * 20}&id_lte=${(count + 1) * 20 - 1}`)
+    // fetch(`http://localhost:3000/topic_info?id_gte=${count * 20}&id_lte=${(count + 1) * 20 - 1}`)
+    fetch(`http://localhost:3000/topic_info`)
       .then((res) => res.json())
       .then((body) => {
         setData([...data, ...body]);
@@ -33,7 +35,17 @@ const TopicInfo = () => {
       .catch(() => {
         setLoading(false);
       });
-    count++;
+    // count++;
+    // fetch(`http://localhost:3000/topic_info_comment?id_gte=${count * 20}&id_lte=${(count + 1) * 20 - 1}`)
+    fetch(`http://localhost:3000/topic_info_comment`)
+      .then((res) => res.json())
+      .then((body) => {
+        setCommentData([...data, ...body]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -69,40 +81,6 @@ const TopicInfo = () => {
     setShowComment(!showComment);
   };
 
-  const actions = [
-    <Tooltip key="comment-basic-like" title="点赞">
-      <span onClick={like}>
-        {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-        <span>{likes}</span>
-      </span>
-    </Tooltip>,
-    <Tooltip key="comment-basic-dislike" title="踩">
-      <span onClick={dislike}>
-        {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
-        <span>{dislikes}</span>
-      </span>
-    </Tooltip>,
-    <Tooltip key="comment-basic-dislike" title="评论">
-      <span onClick={reply}>
-        {React.createElement(MessageOutlined)}
-        <span>回复</span>
-      </span>
-    </Tooltip>,
-  ];
-
-  const listData = [];
-  for (let i = 0; i < 5; i++) {
-    listData.push({
-      href: 'https://ant.design',
-      title: `ant design part ${i}`,
-      avatar: 'https://joeschmoe.io/api/v1/random',
-      description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-      content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-    });
-  }
-
   return (
     <Card>
       <InfiniteScroll
@@ -110,7 +88,7 @@ const TopicInfo = () => {
         next={loadMoreData}
         hasMore={data.length < 10}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-        endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+        endMessage={<Divider plain>没有更多了~~ 🤐</Divider>}
         scrollableTarget="scrollableDiv"
       >
         <List
@@ -118,21 +96,38 @@ const TopicInfo = () => {
           size="large"
           dataSource={data}
           renderItem={(item) => (
-            <List.Item key={item.id} actions={actions} extra={<Button type="primary">关注</Button>}>
+            <List.Item
+              key={item.id}
+              actions={[
+                <Tooltip key="comment-basic-like" title="点赞">
+                  <span onClick={like}>
+                    {React.createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
+                    <span>{item.like}</span>
+                  </span>
+                </Tooltip>,
+                <Tooltip key="comment-basic-dislike" title="踩">
+                  <span onClick={dislike}>
+                    {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
+                    <span>{item.disLike}</span>
+                  </span>
+                </Tooltip>,
+                <Tooltip key="comment-basic-dislike" title="评论">
+                  <span onClick={reply}>
+                    {React.createElement(MessageOutlined)}
+                    <span>回复</span>
+                  </span>
+                </Tooltip>,
+              ]}
+              extra={<Button type="primary">关注</Button>}
+            >
               <Comment
                 author={
                   <a>
-                    <strong>hello world</strong>
+                    <strong>{item.author}</strong>
                   </a>
                 }
-                avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-                content={
-                  <p>
-                    We supply a series of design principles, practical patterns and high quality
-                    design resources (Sketch and Axure), to help people create their product
-                    prototypes beautifully and efficiently.
-                  </p>
-                }
+                avatar={<Avatar src={item.avatar} alt="Han Solo" />}
+                content={<p>{item.content}</p>}
                 datetime={
                   <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
                     <span>{moment().fromNow()}</span>
@@ -149,20 +144,40 @@ const TopicInfo = () => {
                     className="comment-list"
                     header={`您有 ${data.length} 条评论`}
                     itemLayout="horizontal"
-                    dataSource={listData}
+                    dataSource={commentData}
                     renderItem={(item) => (
                       <Comment
-                        actions={actions}
-                        title={<a href="https://ant.design">你好</a>}
-                        author={<strong>姓名</strong>}
+                        actions={[
+                          <Tooltip key="comment-basic-like" title="点赞">
+                            <span onClick={like}>
+                              {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
+                              <span>{item.like}</span>
+                            </span>
+                          </Tooltip>,
+                          <Tooltip key="comment-basic-dislike" title="踩">
+                            <span onClick={dislike}>
+                              {React.createElement(
+                                action === 'disliked' ? DislikeFilled : DislikeOutlined,
+                              )}
+                              <span>{item.disLike}</span>
+                            </span>
+                          </Tooltip>,
+                          <Tooltip key="comment-basic-dislike" title="评论">
+                            <span onClick={reply}>
+                              {React.createElement(MessageOutlined)}
+                              <span>回复</span>
+                            </span>
+                          </Tooltip>,
+                        ]}
+                        title={<a href={item.href}>{item.title}</a>}
+                        author={<strong>{item.author}</strong>}
                         avatar={<Avatar />}
-                        content={
-                          <span>
-                            Ant Design, a design language for background applications, is refined by
-                            Ant UED Team
-                          </span>
+                        content={<span>{item.content}</span>}
+                        datetime={
+                          <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+                            <span>{moment().fromNow()}</span>
+                          </Tooltip>
                         }
-                        datetime={<span>2022-05-04</span>}
                       />
                     )}
                   />

@@ -1,8 +1,8 @@
 // 使用 Mock
 const Mock = require('mockjs');
-const {Tooltip} = require("_antd@4.20.3@antd");
-const moment = require("moment");
-const React = require("react");
+const { Tooltip } = require('_antd@4.20.3@antd');
+const moment = require('moment');
+const React = require('react');
 
 var random = Mock.Random;
 
@@ -170,6 +170,10 @@ const Community_list = [];
 const Complex_list = [];
 const Posts_list = [];
 const Read_list = [];
+const home_recommend_list = [];
+const home_new_list = [];
+const home_news_list = [];
+const home_hot_list = [];
 for (let i = 0; i < 100; i++) {
   let temp = {
     id: i,
@@ -188,9 +192,11 @@ for (let i = 0; i < 100; i++) {
       '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。',
     activeUser: Math.ceil(Math.random() * 100000) + 100000,
     newUser: Math.ceil(Math.random() * 1000) + 1000,
+    rank: i + 1,
     star: Math.ceil(Math.random() * 100) + 100,
     like: Math.ceil(Math.random() * 100) + 100,
     message: Math.ceil(Math.random() * 10) + 10,
+    tags: ['Ant Design', '设计语言', '蚂蚁金服'],
     content:
       '段落示意：蚂蚁金服设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。',
     members: [
@@ -211,11 +217,14 @@ for (let i = 0; i < 100; i++) {
       },
     ],
   };
-  Community_list.push(temp);
   Article_list.push(temp);
+  Community_list.push(temp);
   Complex_list.push(temp);
   Posts_list.push(temp);
   Read_list.push(temp);
+  home_recommend_list.push(temp);
+  home_new_list.push(temp);
+  home_hot_list.push(temp);
 }
 
 let owners = [];
@@ -240,7 +249,6 @@ for (let i = 0; i < 100; i++) {
 
 const users_list = [];
 const topic_activity = [];
-const topic_info = [];
 for (let i = 0; i < 100; i++) {
   let temp = {
     id: i + 1,
@@ -257,15 +265,37 @@ for (let i = 0; i < 100; i++) {
       thumbnail: 'https://randomuser.me/api/portraits/thumb/men/85.jpg',
     },
     nat: 'DK',
+    time: '2022.5.6~2022.5.9',
+    browseNum: '666',
+    img: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
   };
   users_list.push(temp);
   topic_activity.push(temp);
-  topic_info.push(temp);
 }
 
 const topic_data = [];
 for (let i = 0; i < 15; i++) {
   topic_data.push({ id: i, title: '你好世界', num: 666 });
+}
+
+const topic_info = [];
+const topic_info_comment = [];
+for (let i = 0; i < 5; i++) {
+  const obj = {
+    author: user[i % 10],
+    href: 'https://ant.design',
+    title: titles[i % 8],
+    avatar: avatars[i % 8],
+    description:
+      'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+    content:
+      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+    like: Math.ceil(Math.random() * 100) + 100,
+    disLike: Math.ceil(Math.random() * 100) + 10,
+    message: Math.ceil(Math.random() * 10) + 10,
+  };
+  topic_info.push(obj);
+  topic_info_comment.push(obj);
 }
 
 const article_viewer_comment = [];
@@ -275,142 +305,144 @@ for (let i = 0; i < 15; i++) {
   article_viewer_comment.push({
     author: '天呆',
     avatar: 'https://joeschmoe.io/api/v1/random',
-    userId: "001",
-    type: "comment",
-    replyUserId: "",
-    replayUserName: "",
-    content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully andefficiently.',
-  })
+    userId: '001',
+    type: 'comment',
+    replyUserId: '',
+    replayUserName: '',
+    content:
+      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully andefficiently.',
+  });
 }
 article_viewer_content.push({
   title: '基于ByteMD的MarkDown渲染文章详情页面，目录使用markdown-navbar生成',
   label: '原创',
-  content: "---\n" +
-    "# frontmatter: https://jekyllrb.com/docs/front-matter/\n" +
-    "layout: post\n" +
-    "title: Blogging Like a Hacker\n" +
-    "---\n" +
-    "\n" +
-    "## 一级标题下面包含2个二级标题：Markdown Basic Syntax\n" +
-    "\n" +
+  content:
+    '---\n' +
+    '# frontmatter: https://jekyllrb.com/docs/front-matter/\n' +
+    'layout: post\n' +
+    'title: Blogging Like a Hacker\n' +
+    '---\n' +
+    '\n' +
+    '## 一级标题下面包含2个二级标题：Markdown Basic Syntax\n' +
+    '\n' +
     "I just love **bold text**. Italicized text is the _cat's meow_. At the command prompt, type `nano`.\n" +
-    "\n" +
-    "My favorite markdown editor is [ByteMD](https://github.com/bytedance/bytemd).\n" +
-    "\n" +
-    "1. First item\n" +
-    "2. Second item\n" +
-    "3. Third item\n" +
-    "\n" +
-    "> Dorothy followed her through many of the beautiful rooms in her castle.\n" +
-    "\n" +
-    "### JS代码示例\n" +
-    "```js\n" +
+    '\n' +
+    'My favorite markdown editor is [ByteMD](https://github.com/bytedance/bytemd).\n' +
+    '\n' +
+    '1. First item\n' +
+    '2. Second item\n' +
+    '3. Third item\n' +
+    '\n' +
+    '> Dorothy followed her through many of the beautiful rooms in her castle.\n' +
+    '\n' +
+    '### JS代码示例\n' +
+    '```js\n' +
     "import { Editor, Viewer } from 'bytemd'\n" +
     "import gfm from '@bytemd/plugin-gfm'\n" +
-    "\n" +
-    "const plugins = [\n" +
-    "  gfm(),\n" +
-    "  // Add more plugins here\n" +
-    "]\n" +
-    "\n" +
-    "const editor = new Editor({\n" +
-    "  target: document.body, // DOM to render\n" +
-    "  props: {\n" +
+    '\n' +
+    'const plugins = [\n' +
+    '  gfm(),\n' +
+    '  // Add more plugins here\n' +
+    ']\n' +
+    '\n' +
+    'const editor = new Editor({\n' +
+    '  target: document.body, // DOM to render\n' +
+    '  props: {\n' +
     "    value: '',\n" +
-    "    plugins,\n" +
-    "  },\n" +
-    "})\n" +
-    "\n" +
+    '    plugins,\n' +
+    '  },\n' +
+    '})\n' +
+    '\n' +
     "editor.on('change', (e) => {\n" +
-    "  editor.$set({ value: e.detail.value })\n" +
-    "})\n" +
-    "```\n" +
-    "### Java代码\n" +
-    "```java\n" +
-    "/**\n" +
-    " * @author John Smith <john.smith@example.com>\n" +
-    "*/\n" +
-    "package l2f.gameserver.model;\n" +
-    "\n" +
-    "public abstract strictfp class L2Char extends L2Object {\n" +
-    "  public static final Short ERROR = 0x0001;\n" +
-    "\n" +
-    "  public void moveTo(int x, int y, int z) {\n" +
-    "    _ai = null;\n" +
-    "    log(\"Should not be called\");\n" +
-    "    if (1 > 5) { // wtf!?\n" +
-    "      return;\n" +
-    "    }\n" +
-    "  }\n" +
-    "}\n" +
-    "```\n" +
-    "\n" +
-    "## GFM Extended Syntax\n" +
-    "\n" +
-    "Automatic URL Linking: https://github.com/bytedance/bytemd\n" +
-    "\n" +
-    "~~The world is flat.~~ We now know that the world is round.\n" +
-    "\n" +
-    "- [x] Write the press release\n" +
-    "- [ ] Update the website\n" +
-    "- [ ] Contact the media\n" +
-    "\n" +
-    "| Syntax    | Description |\n" +
-    "| --------- | ----------- |\n" +
-    "| Header    | Title       |\n" +
-    "| Paragraph | Text        |\n" +
-    "\n" +
-    "## Footnotes\n" +
-    "\n" +
+    '  editor.$set({ value: e.detail.value })\n' +
+    '})\n' +
+    '```\n' +
+    '### Java代码\n' +
+    '```java\n' +
+    '/**\n' +
+    ' * @author John Smith <john.smith@example.com>\n' +
+    '*/\n' +
+    'package l2f.gameserver.model;\n' +
+    '\n' +
+    'public abstract strictfp class L2Char extends L2Object {\n' +
+    '  public static final Short ERROR = 0x0001;\n' +
+    '\n' +
+    '  public void moveTo(int x, int y, int z) {\n' +
+    '    _ai = null;\n' +
+    '    log("Should not be called");\n' +
+    '    if (1 > 5) { // wtf!?\n' +
+    '      return;\n' +
+    '    }\n' +
+    '  }\n' +
+    '}\n' +
+    '```\n' +
+    '\n' +
+    '## GFM Extended Syntax\n' +
+    '\n' +
+    'Automatic URL Linking: https://github.com/bytedance/bytemd\n' +
+    '\n' +
+    '~~The world is flat.~~ We now know that the world is round.\n' +
+    '\n' +
+    '- [x] Write the press release\n' +
+    '- [ ] Update the website\n' +
+    '- [ ] Contact the media\n' +
+    '\n' +
+    '| Syntax    | Description |\n' +
+    '| --------- | ----------- |\n' +
+    '| Header    | Title       |\n' +
+    '| Paragraph | Text        |\n' +
+    '\n' +
+    '## Footnotes\n' +
+    '\n' +
     "Here's a simple footnote,[^1] and here's a longer one.[^bignote]\n" +
-    "\n" +
-    "[^1]: This is the first footnote.\n" +
+    '\n' +
+    '[^1]: This is the first footnote.\n' +
     "[^bignote]: Here's one with multiple paragraphs and code.\n" +
-    "\n" +
-    "    Indent paragraphs to include them in the footnote.\n" +
-    "\n" +
-    "    `{ my code }`\n" +
-    "\n" +
-    "    Add as many paragraphs as you like.\n" +
-    "\n" +
-    "## Gemoji\n" +
-    "\n" +
-    "Thumbs up: :+1:, thumbs down: :-1:.\n" +
-    "\n" +
-    "Families: :family_man_man_boy_boy:\n" +
-    "\n" +
-    "Long flags: :wales:, :scotland:, :england:.\n" +
-    "\n" +
-    "## Math Equation\n" +
-    "\n" +
-    "Inline math equation: $a+b$\n" +
-    "\n" +
-    "$$\n" +
-    "\\displaystyle \\left( \\sum_{k=1}^n a_k b_k \\right)^2 \\leq \\left( \\sum_{k=1}^n a_k^2 \\right) \\left( \\sum_{k=1}^n b_k^2 \\right)\n" +
-    "$$\n" +
-    "\n" +
-    "## Mermaid Diagrams\n" +
-    "\n" +
-    "```mermaid\n" +
-    "graph TD;\n" +
-    "  A-->B;\n" +
-    "  A-->C;\n" +
-    "  B-->D;\n" +
-    "  C-->D;\n" +
-    "```\n" +
-    "\n" +
-    "```mermaid\n" +
-    "pie title Pets adopted by volunteers\n" +
-    "\"Dogs\" : 386\n" +
-    "\"Cats\" : 85\n" +
-    "\"Rats\" : 15\n" +
-    "```\n" +
-    "\n" +
-    "\n" +
-    "| 标题1 | 标题2 |标题3 |\n" +
-    "| --- | --- |--- |\n" +
-    "|  111| 222 |333|\n",
-})
+    '\n' +
+    '    Indent paragraphs to include them in the footnote.\n' +
+    '\n' +
+    '    `{ my code }`\n' +
+    '\n' +
+    '    Add as many paragraphs as you like.\n' +
+    '\n' +
+    '## Gemoji\n' +
+    '\n' +
+    'Thumbs up: :+1:, thumbs down: :-1:.\n' +
+    '\n' +
+    'Families: :family_man_man_boy_boy:\n' +
+    '\n' +
+    'Long flags: :wales:, :scotland:, :england:.\n' +
+    '\n' +
+    '## Math Equation\n' +
+    '\n' +
+    'Inline math equation: $a+b$\n' +
+    '\n' +
+    '$$\n' +
+    '\\displaystyle \\left( \\sum_{k=1}^n a_k b_k \\right)^2 \\leq \\left( \\sum_{k=1}^n a_k^2 \\right) \\left( \\sum_{k=1}^n b_k^2 \\right)\n' +
+    '$$\n' +
+    '\n' +
+    '## Mermaid Diagrams\n' +
+    '\n' +
+    '```mermaid\n' +
+    'graph TD;\n' +
+    '  A-->B;\n' +
+    '  A-->C;\n' +
+    '  B-->D;\n' +
+    '  C-->D;\n' +
+    '```\n' +
+    '\n' +
+    '```mermaid\n' +
+    'pie title Pets adopted by volunteers\n' +
+    '"Dogs" : 386\n' +
+    '"Cats" : 85\n' +
+    '"Rats" : 15\n' +
+    '```\n' +
+    '\n' +
+    '\n' +
+    '| 标题1 | 标题2 |标题3 |\n' +
+    '| --- | --- |--- |\n' +
+    '|  111| 222 |333|\n',
+});
 article_viewer_info.push({
   author: '天天发呆的程序员',
   time: '2021-10-24 10:24:00',
@@ -419,25 +451,43 @@ article_viewer_info.push({
   readNum: 56,
   collectNum: 8,
   starNum: 2223,
-})
+});
 
 const home_public_data = [];
+const home_follow_data = [];
 const home_user_data = [];
 const home_good_author_list = [];
 for (let i = 0; i < 3; i++) {
   home_public_data.push({
-    avatar: 'https://joeschmoe.io/api/v1/random',
+    avatar: avatars[i % 8],
     title: `OnePiece社区Version0.0.${i}版本发布`,
     titleHref: 'https://ant.design',
     time: '2022-02-01',
-    desc: "该版本目前正处于测试阶段，前端页面多数正处于开发过程中，尚未接入后端接口。",
-  })
+    desc: '该版本目前正处于测试阶段，前端页面多数正处于开发过程中，尚未接入后端接口。',
+  });
   home_good_author_list.push({
-    avatar: 'https://joeschmoe.io/api/v1/random',
-    name: '天天发呆的程序员',
+    avatar: avatars[i % 8],
+    name: user[i % 10],
     href: 'https://ant.design',
-    desc: '2022年CSDN博客之星TOP8，CSDN博客专家，Java领域优质创作者，阿里巴巴全栈开发工程师。'
-  })
+    desc: '2022年CSDN博客之星TOP8，CSDN博客专家，Java领域优质创作者，阿里巴巴全栈开发工程师。',
+  });
+  home_follow_data.push({
+    id: `trend-${i}`,
+    updatedAt: new Date(),
+    user: {
+      name: user[i % 10],
+      avatar: avatars[i % 8],
+    },
+    group: {
+      name: '高逼格设计天团',
+      link: 'http://github.com/',
+    },
+    project: {
+      name: '六月迭代',
+      link: 'http://github.com/',
+    },
+    template: '在 @{group} 新建项目 @{project}',
+  });
 }
 home_user_data.push({
   avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
@@ -450,9 +500,8 @@ home_user_data.push({
   articleNum: 66,
   testAnswerNum: 10,
   testAnswerAllNum: 100,
-  rank: 6
-})
-
+  rank: 6,
+});
 
 module.exports = () => {
   return {
@@ -474,14 +523,20 @@ module.exports = () => {
     users_list,
     topic_activity,
     topic_info,
+    topic_info_comment,
     topic_data,
     Read_list,
     article_viewer_comment,
     article_viewer_content,
     article_viewer_info,
     home_public_data,
+    home_follow_data,
     home_user_data,
     home_good_author_list,
+    home_recommend_list,
+    home_new_list,
+    home_news_list,
+    home_hot_list,
   };
 };
 

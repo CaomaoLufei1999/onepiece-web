@@ -58,32 +58,28 @@ const ActivitiesPage = () => {
                       <span>{item.email}</span>
                       <Row justify="space-between">
                         <Col>
-                          <span>2022.5.6~2022.5.9</span>
+                          <span>{item.time}</span>
                         </Col>
                         <Col>
                           <span style={{ color: '#fc5531' }}>
                             <FireFilled />
-                            662
+                            {item.browseNum}
                           </span>
                         </Col>
                       </Row>
-                      <img
-                        width="100%"
-                        alt="logo"
-                        src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                      />
+                      <img width="100%" alt="logo" src={item.img} />
                     </div>
                   ) : (
                     <div>
                       <Row>{item.email}</Row>
                       <Row>
                         <Col>
-                          <span>2022.5.6~2022.5.9</span>
+                          <span>{item.time}</span>
                         </Col>
                         <Col offset={1}>
                           <span style={{ color: '#fc5531' }}>
                             <FireFilled />
-                            662
+                            {item.browseNum}
                           </span>
                         </Col>
                       </Row>
@@ -91,13 +87,7 @@ const ActivitiesPage = () => {
                   )
                 }
               />
-              {index > 2 ? (
-                <img
-                  width={100}
-                  alt="logo"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                />
-              ) : null}
+              {index > 2 ? <img width={100} alt="logo" src={item.img} /> : null}
             </List.Item>
           )}
         />
