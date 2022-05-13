@@ -56,7 +56,7 @@ const SolveList = () => {
   }, []);
 
   return (
-    <Col className="gutter-row" span={17} style={{ marginTop: '-20px' }}>
+    <Col className="gutter-row" span={18} style={{ marginTop: '-20px' }}>
       <DividerComponent />
       <InfiniteScroll
         dataLength={data.length}

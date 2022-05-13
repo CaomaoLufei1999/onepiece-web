@@ -337,7 +337,7 @@ const Home = () => {
                 padding: 10,
               }}
             >
-              <RecommendUsers />
+              {/* <RecommendUsers /> */}
             </Card>
           </Col>
         </Row>

@@ -1,31 +1,157 @@
 // 使用 Mock
 const Mock = require('mockjs');
-const { Tooltip } = require('_antd@4.20.3@antd');
-const moment = require('moment');
-const React = require('react');
-
 var random = Mock.Random;
 
-let rank_data_author = [];
-let rank_data_blog = [];
-let rank_data_domain = [];
-let rank_data_point_id_1 = [];
-let rank_data_point_id_2 = [];
-let rank_data_point_id_3 = [];
-let rank_data_point_id_4 = [];
-let rank_data_point_id_5 = [];
-let rank_data_solve = [];
-
 /**
- * =========================================START==================================================
+ * 下面随机使用的静态数据
  */
-
-// TODO data
+const titles = [
+  'Alipay',
+  'Angular',
+  'Ant Design',
+  'Ant Design Pro',
+  'Bootstrap',
+  'React',
+  'Vue',
+  'Webpack',
+];
+const avatars = [
+  'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png', // Alipay
+  'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png', // Angular
+  'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png', // Ant Design
+  'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNfCjCzDBL.png', // Ant Design Pro
+  'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png', // Bootstrap
+  'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png', // React
+  'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png', // Vue
+  'https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png', // Webpack
+];
+const covers = [
+  'https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png',
+  'https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png',
+  'https://gw.alipayobjects.com/zos/rmsportal/iXjVmWVHbCJAyqvDxdtx.png',
+  'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png',
+];
+const desc = [
+  '那是一种内在的东西， 他们到达不了，也无法触及的',
+  '希望是一个好东西，也许是最好的，好东西是不会消亡的',
+  '生命就像一盒巧克力，结果往往出人意料',
+  '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
+  '那时候我只会想自己想要什么，从不想自己拥有什么',
+];
+const user = [
+  '付小小',
+  '曲丽丽',
+  '林东东',
+  '周星星',
+  '吴加好',
+  '朱偏右',
+  '鱼酱',
+  '乐哥',
+  '谭小仪',
+  '仲尼',
+];
 
 /**
- * ===========================================END================================================
+ * 各个路径的后缀，也是数据的存储体
+ */
+let rank_data_author = []; //作者排行榜 /rank/list/weekly
+let rank_data_blog = []; //博客热榜 /rank/list/blog
+let rank_data_domain = []; //积分总榜 /rank/list/total
+let rank_data_point_id_1 = []; //领域榜的各个部分，暂未解决按需加载问题 /rank/list/content
+let rank_data_point_id_2 = []; //同上
+let rank_data_point_id_3 = []; //同上
+let rank_data_point_id_4 = []; //同上
+let rank_data_point_id_5 = []; //同上
+let rank_data_solve = []; //解题作者榜 /rank/list/resolve
+let Article_list = []; //全站搜索的博客列表 /search/articles
+let Community_list = []; //博客社区的博客列表 /community
+let Complex_list = []; //全站搜索的综合列表 /search/all
+let users_list = []; //全站搜索的用户推荐列表 /search/users
+let Posts_list = []; //全站搜索的帖子列表 /search/posts
+let problem_list = []; //全站搜索的题目列表 /search/problems
+let Read_list = []; //读书区的书籍列表 /read-book
+let home_recommend_list = []; //首页的推荐博客列表 /home
+let home_new_list = []; //首页的新发博客列表 /home
+let home_news_list = []; //首页的资讯热点列表 /home
+let home_hot_list = []; //首页的热榜博客列表 /home
+let article_viewer_comment = []; //博客的评论数据 /article/detail
+let article_viewer_content = []; //博客的内容数据 /article/detail
+let article_viewer_info = []; //博客的各种数据 /article/detail
+let home_public_data = []; //主页的公告栏数据 /home
+let home_follow_data = []; //主页的粉丝数据 /home
+let home_user_data = []; //主页的用户数据 /home
+let home_good_author_list = []; //主页的推荐用户数据，显示不出来这个模块 /home
+let topic_info = []; //灌水专区的用户数据 /talk/topic
+let topic_info_comment = []; //灌水专区的评论数据 /talk/topic
+let topic_data = []; //灌水专区的热门活动模块的数据 /talk/topic
+let topic_activity = []; //灌水专区的更多活动列表 /talk/topic/activities
+let owners = []; //全站搜索的owner，飞哥说改成搜索框 /search/articles
+
+/**
+ * 下面开始造数据
  */
 for (let i = 0; i < 100; i++) {
+  let temp = {
+    id: i,
+    owner: user[i % 10],
+    title: titles[i % 8],
+    avatar: avatars[i % 8],
+    cover: parseInt(`${i / 4}`, 10) % 2 === 0 ? covers[i % 4] : covers[3 - (i % 4)],
+    status: ['active', 'exception', 'normal'][i % 3],
+    percent: Math.ceil(Math.random() * 50) + 50,
+    logo: avatars[i % 8],
+    href: 'https://ant.design',
+    updatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
+    createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
+    subDescription: desc[i % 5],
+    description:
+      '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。',
+    activeUser: Math.ceil(Math.random() * 100000) + 100000,
+    newUser: Math.ceil(Math.random() * 1000) + 1000,
+    rank: i + 1,
+    star: Math.ceil(Math.random() * 100) + 100,
+    like: Math.ceil(Math.random() * 100) + 100,
+    message: Math.ceil(Math.random() * 10) + 10,
+    tags: ['Ant Design', '设计语言', '蚂蚁金服'],
+    content:
+      '段落示意：蚂蚁金服设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。',
+    members: [
+      {
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png',
+        name: '曲丽丽',
+        id: 'member1',
+      },
+      {
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/tBOxZPlITHqwlGjsJWaF.png',
+        name: '王昭君',
+        id: 'member2',
+      },
+      {
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/sBxjgqiuHMGRkIjqlQCd.png',
+        name: '董娜娜',
+        id: 'member3',
+      },
+    ],
+  };
+  let temp_2 = {
+    id: i + 1,
+    gender: 'male',
+    name: {
+      title: 'Mr',
+      first: 'Sander',
+      last: 'Olsen',
+    },
+    email: 'sander.olsen@example.com',
+    picture: {
+      large: 'https://randomuser.me/api/portraits/men/85.jpg',
+      medium: 'https://randomuser.me/api/portraits/med/men/85.jpg',
+      thumbnail: 'https://randomuser.me/api/portraits/thumb/men/85.jpg',
+    },
+    nat: 'DK',
+    time: '2022.5.6~2022.5.9',
+    browseNum: '666',
+    img: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
+  };
   let name = random.cname(); // 随机中文名字
   let picture = 'https://randomuser.me/api/portraits/women/27.jpg'; //固定一个头像
   let concern = 1000 - i * 9; //关注数
@@ -117,126 +243,6 @@ for (let i = 0; i < 100; i++) {
     concern,
     solveNumber,
   });
-}
-
-const titles = [
-  'Alipay',
-  'Angular',
-  'Ant Design',
-  'Ant Design Pro',
-  'Bootstrap',
-  'React',
-  'Vue',
-  'Webpack',
-];
-const avatars = [
-  'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png', // Alipay
-  'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png', // Angular
-  'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png', // Ant Design
-  'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNfCjCzDBL.png', // Ant Design Pro
-  'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png', // Bootstrap
-  'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png', // React
-  'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png', // Vue
-  'https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png', // Webpack
-];
-const covers = [
-  'https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/iXjVmWVHbCJAyqvDxdtx.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png',
-];
-const desc = [
-  '那是一种内在的东西， 他们到达不了，也无法触及的',
-  '希望是一个好东西，也许是最好的，好东西是不会消亡的',
-  '生命就像一盒巧克力，结果往往出人意料',
-  '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
-  '那时候我只会想自己想要什么，从不想自己拥有什么',
-];
-const user = [
-  '付小小',
-  '曲丽丽',
-  '林东东',
-  '周星星',
-  '吴加好',
-  '朱偏右',
-  '鱼酱',
-  '乐哥',
-  '谭小仪',
-  '仲尼',
-];
-
-const Article_list = [];
-const Community_list = [];
-const Complex_list = [];
-const Posts_list = [];
-const Read_list = [];
-const home_recommend_list = [];
-const home_new_list = [];
-const home_news_list = [];
-const home_hot_list = [];
-for (let i = 0; i < 100; i++) {
-  let temp = {
-    id: i,
-    owner: user[i % 10],
-    title: titles[i % 8],
-    avatar: avatars[i % 8],
-    cover: parseInt(`${i / 4}`, 10) % 2 === 0 ? covers[i % 4] : covers[3 - (i % 4)],
-    status: ['active', 'exception', 'normal'][i % 3],
-    percent: Math.ceil(Math.random() * 50) + 50,
-    logo: avatars[i % 8],
-    href: 'https://ant.design',
-    updatedAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
-    createdAt: new Date(new Date().getTime() - 1000 * 60 * 60 * 2 * i).getTime(),
-    subDescription: desc[i % 5],
-    description:
-      '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。',
-    activeUser: Math.ceil(Math.random() * 100000) + 100000,
-    newUser: Math.ceil(Math.random() * 1000) + 1000,
-    rank: i + 1,
-    star: Math.ceil(Math.random() * 100) + 100,
-    like: Math.ceil(Math.random() * 100) + 100,
-    message: Math.ceil(Math.random() * 10) + 10,
-    tags: ['Ant Design', '设计语言', '蚂蚁金服'],
-    content:
-      '段落示意：蚂蚁金服设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，提供跨越设计与开发的体验解决方案。',
-    members: [
-      {
-        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png',
-        name: '曲丽丽',
-        id: 'member1',
-      },
-      {
-        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/tBOxZPlITHqwlGjsJWaF.png',
-        name: '王昭君',
-        id: 'member2',
-      },
-      {
-        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/sBxjgqiuHMGRkIjqlQCd.png',
-        name: '董娜娜',
-        id: 'member3',
-      },
-    ],
-  };
-  Article_list.push(temp);
-  Community_list.push(temp);
-  Complex_list.push(temp);
-  Posts_list.push(temp);
-  Read_list.push(temp);
-  home_recommend_list.push(temp);
-  home_new_list.push(temp);
-  home_hot_list.push(temp);
-}
-
-let owners = [];
-for (let i = 0; i < 10; i++) {
-  owners.push({
-    id: i,
-    name: random.cname(),
-  });
-}
-
-const problem_list = [];
-for (let i = 0; i < 100; i++) {
   problem_list.push({
     key: i,
     number: i + 1,
@@ -245,42 +251,19 @@ for (let i = 0; i < 100; i++) {
     level: ['easy'],
     resolve_state: ['pass'],
   });
+  Article_list.push(temp);
+  Community_list.push(temp);
+  Complex_list.push(temp);
+  Posts_list.push(temp);
+  Read_list.push(temp);
+  home_recommend_list.push(temp);
+  home_new_list.push(temp);
+  home_hot_list.push(temp);
+  users_list.push(temp_2);
+  topic_activity.push(temp_2);
 }
 
-const users_list = [];
-const topic_activity = [];
-for (let i = 0; i < 100; i++) {
-  let temp = {
-    id: i + 1,
-    gender: 'male',
-    name: {
-      title: 'Mr',
-      first: 'Sander',
-      last: 'Olsen',
-    },
-    email: 'sander.olsen@example.com',
-    picture: {
-      large: 'https://randomuser.me/api/portraits/men/85.jpg',
-      medium: 'https://randomuser.me/api/portraits/med/men/85.jpg',
-      thumbnail: 'https://randomuser.me/api/portraits/thumb/men/85.jpg',
-    },
-    nat: 'DK',
-    time: '2022.5.6~2022.5.9',
-    browseNum: '666',
-    img: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
-  };
-  users_list.push(temp);
-  topic_activity.push(temp);
-}
-
-const topic_data = [];
-for (let i = 0; i < 15; i++) {
-  topic_data.push({ id: i, title: '你好世界', num: 666 });
-}
-
-const topic_info = [];
-const topic_info_comment = [];
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 10; i++) {
   const obj = {
     author: user[i % 10],
     href: 'https://ant.design',
@@ -294,14 +277,6 @@ for (let i = 0; i < 5; i++) {
     disLike: Math.ceil(Math.random() * 100) + 10,
     message: Math.ceil(Math.random() * 10) + 10,
   };
-  topic_info.push(obj);
-  topic_info_comment.push(obj);
-}
-
-const article_viewer_comment = [];
-const article_viewer_content = [];
-const article_viewer_info = [];
-for (let i = 0; i < 15; i++) {
   article_viewer_comment.push({
     author: '天呆',
     avatar: 'https://joeschmoe.io/api/v1/random',
@@ -312,7 +287,45 @@ for (let i = 0; i < 15; i++) {
     content:
       'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully andefficiently.',
   });
+  topic_data.push({ id: i, title: '你好世界', num: 666 });
+  topic_info.push(obj);
+  topic_info_comment.push(obj);
+  owners.push({
+    id: i,
+    name: random.cname(),
+  });
+  home_public_data.push({
+    avatar: avatars[i % 8],
+    title: `OnePiece社区Version0.0.${i}版本发布`,
+    titleHref: 'https://ant.design',
+    time: '2022-02-01',
+    desc: '该版本目前正处于测试阶段，前端页面多数正处于开发过程中，尚未接入后端接口。',
+  });
+  home_good_author_list.push({
+    avatar: avatars[i % 8],
+    name: user[i % 10],
+    href: 'https://ant.design',
+    desc: '2022年CSDN博客之星TOP8，CSDN博客专家，Java领域优质创作者，阿里巴巴全栈开发工程师。',
+  });
+  home_follow_data.push({
+    id: `trend-${i}`,
+    updatedAt: new Date(),
+    user: {
+      name: user[i % 10],
+      avatar: avatars[i % 8],
+    },
+    group: {
+      name: '高逼格设计天团',
+      link: 'http://github.com/',
+    },
+    project: {
+      name: '六月迭代',
+      link: 'http://github.com/',
+    },
+    template: '在 @{group} 新建项目 @{project}',
+  });
 }
+
 article_viewer_content.push({
   title: '基于ByteMD的MarkDown渲染文章详情页面，目录使用markdown-navbar生成',
   label: '原创',
@@ -453,42 +466,6 @@ article_viewer_info.push({
   starNum: 2223,
 });
 
-const home_public_data = [];
-const home_follow_data = [];
-const home_user_data = [];
-const home_good_author_list = [];
-for (let i = 0; i < 3; i++) {
-  home_public_data.push({
-    avatar: avatars[i % 8],
-    title: `OnePiece社区Version0.0.${i}版本发布`,
-    titleHref: 'https://ant.design',
-    time: '2022-02-01',
-    desc: '该版本目前正处于测试阶段，前端页面多数正处于开发过程中，尚未接入后端接口。',
-  });
-  home_good_author_list.push({
-    avatar: avatars[i % 8],
-    name: user[i % 10],
-    href: 'https://ant.design',
-    desc: '2022年CSDN博客之星TOP8，CSDN博客专家，Java领域优质创作者，阿里巴巴全栈开发工程师。',
-  });
-  home_follow_data.push({
-    id: `trend-${i}`,
-    updatedAt: new Date(),
-    user: {
-      name: user[i % 10],
-      avatar: avatars[i % 8],
-    },
-    group: {
-      name: '高逼格设计天团',
-      link: 'http://github.com/',
-    },
-    project: {
-      name: '六月迭代',
-      link: 'http://github.com/',
-    },
-    template: '在 @{group} 新建项目 @{project}',
-  });
-}
 home_user_data.push({
   avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
   name: '吴彦祖',
@@ -503,6 +480,7 @@ home_user_data.push({
   rank: 6,
 });
 
+//结尾的输出
 module.exports = () => {
   return {
     rank_data_author,
@@ -539,187 +517,3 @@ module.exports = () => {
     home_hot_list,
   };
 };
-
-// {
-//   "results": [
-//     {
-//       "type": "1",
-//       "gender": "female",
-//       "name": {
-//         "title": "Ms",
-//         "first": "Teuna",
-//         "last": "Evers"
-//       },
-//       "email": "teuna.evers@example.com",
-//       "picture": {
-//         "large": "https://randomuser.me/api/portraits/women/27.jpg",
-//         "medium": "https://randomuser.me/api/portraits/med/women/27.jpg",
-//         "thumbnail": "https://randomuser.me/api/portraits/thumb/women/27.jpg"
-//       },
-//       "nat": "NL",
-//       "title": "【蓝桥杯真题】当蓝桥杯开设Web组之后，对几题能拿省一？"
-//     },
-//     {
-//       "type": "1",
-
-//       "gender": "female",
-//       "name": {
-//         "title": "Miss",
-//         "first": "Capucine",
-//         "last": "Perrin"
-//       },
-//       "email": "capucine.perrin@example.com",
-//       "picture": {
-//         "large": "https://randomuser.me/api/portraits/women/15.jpg",
-//         "medium": "https://randomuser.me/api/portraits/med/women/15.jpg",
-//         "thumbnail": "https://randomuser.me/api/portraits/thumb/women/15.jpg"
-//       },
-//       "nat": "FR",
-//       "title": "【蓝桥杯真题】当蓝桥杯开设Web组之后，对几题能拿省一？"
-//     },
-//     {
-//       "type": "1",
-
-//       "gender": "female",
-//       "name": {
-//         "title": "Miss",
-//         "first": "Eleanor",
-//         "last": "Carpenter"
-//       },
-//       "email": "eleanor.carpenter@example.com",
-//       "picture": {
-//         "large": "https://randomuser.me/api/portraits/women/40.jpg",
-//         "medium": "https://randomuser.me/api/portraits/med/women/40.jpg",
-//         "thumbnail": "https://randomuser.me/api/portraits/thumb/women/40.jpg"
-//       },
-//       "nat": "IE",
-//       "title": "【蓝桥杯真题】当蓝桥杯开设Web组之后，对几题能拿省一？"
-//     },
-//     {
-//       "type": "2",
-
-//       "gender": "female",
-//       "name": {
-//         "title": "Ms",
-//         "first": "Alice",
-//         "last": "Mackay"
-//       },
-//       "email": "alice.mackay@example.com",
-//       "picture": {
-//         "large": "https://randomuser.me/api/portraits/women/62.jpg",
-//         "medium": "https://randomuser.me/api/portraits/med/women/62.jpg",
-//         "thumbnail": "https://randomuser.me/api/portraits/thumb/women/62.jpg"
-//       },
-//       "nat": "CA",
-//       "title": "【蓝桥杯真题】当蓝桥杯开设Web组之后，对几题能拿省一？"
-//     },
-//     {
-//       "type": "3",
-
-//       "gender": "female",
-//       "name": {
-//         "title": "Miss",
-//         "first": "Angie",
-//         "last": "Baker"
-//       },
-//       "email": "angie.baker@example.com",
-//       "picture": {
-//         "large": "https://randomuser.me/api/portraits/women/84.jpg",
-//         "medium": "https://randomuser.me/api/portraits/med/women/84.jpg",
-//         "thumbnail": "https://randomuser.me/api/portraits/thumb/women/84.jpg"
-//       },
-//       "nat": "GB",
-//       "title": "【蓝桥杯真题】当蓝桥杯开设Web组之后，对几题能拿省一？"
-//     },
-//     {
-//       "type": "4",
-
-//       "gender": "male",
-//       "name": {
-//         "title": "Mr",
-//         "first": "Barış",
-//         "last": "Akbulut"
-//       },
-//       "email": "baris.akbulut@example.com",
-//       "picture": {
-//         "large": "https://randomuser.me/api/portraits/men/74.jpg",
-//         "medium": "https://randomuser.me/api/portraits/med/men/74.jpg",
-//         "thumbnail": "https://randomuser.me/api/portraits/thumb/men/74.jpg"
-//       },
-//       "nat": "TR",
-//       "title": "【蓝桥杯真题】当蓝桥杯开设Web组之后，对几题能拿省一？"
-//     },
-//     {
-//       "type": "5",
-
-//       "gender": "male",
-//       "name": {
-//         "title": "Mr",
-//         "first": "Leo",
-//         "last": "Chan"
-//       },
-//       "email": "leo.chan@example.com",
-//       "picture": {
-//         "large": "https://randomuser.me/api/portraits/men/96.jpg",
-//         "medium": "https://randomuser.me/api/portraits/med/men/96.jpg",
-//         "thumbnail": "https://randomuser.me/api/portraits/thumb/men/96.jpg"
-//       },
-//       "nat": "CA",
-//       "title": "【蓝桥杯真题】当蓝桥杯开设Web组之后，对几题能拿省一？"
-//     },
-//     {
-//       "type": "6",
-
-//       "gender": "male",
-//       "name": {
-//         "title": "Mr",
-//         "first": "Pedro",
-//         "last": "Santos"
-//       },
-//       "email": "pedro.santos@example.com",
-//       "picture": {
-//         "large": "https://randomuser.me/api/portraits/men/67.jpg",
-//         "medium": "https://randomuser.me/api/portraits/med/men/67.jpg",
-//         "thumbnail": "https://randomuser.me/api/portraits/thumb/men/67.jpg"
-//       },
-//       "nat": "ES",
-//       "title": "【蓝桥杯真题】当蓝桥杯开设Web组之后，对几题能拿省一？"
-//     },
-//     {
-//       "type": "7",
-
-//       "gender": "female",
-//       "name": {
-//         "title": "Mrs",
-//         "first": "Brooklyn",
-//         "last": "Armstrong"
-//       },
-//       "email": "brooklyn.armstrong@example.com",
-//       "picture": {
-//         "large": "https://randomuser.me/api/portraits/women/22.jpg",
-//         "medium": "https://randomuser.me/api/portraits/med/women/22.jpg",
-//         "thumbnail": "https://randomuser.me/api/portraits/thumb/women/22.jpg"
-//       },
-//       "nat": "AU",
-//       "title": "【蓝桥杯真题】当蓝桥杯开设Web组之后，对几题能拿省一？"
-//     },
-//     {
-//       "type": "8",
-
-//       "gender": "female",
-//       "name": {
-//         "title": "Ms",
-//         "first": "Isabella",
-//         "last": "Hart"
-//       },
-//       "email": "isabella.hart@example.com",
-//       "picture": {
-//         "large": "https://randomuser.me/api/portraits/women/25.jpg",
-//         "medium": "https://randomuser.me/api/portraits/med/women/25.jpg",
-//         "thumbnail": "https://randomuser.me/api/portraits/thumb/women/25.jpg"
-//       },
-//       "nat": "GB",
-//       "title": "【蓝桥杯真题】当蓝桥杯开设Web组之后，对几题能拿省一？"
-//     }
-//   ]
-// }

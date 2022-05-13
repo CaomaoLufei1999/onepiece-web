@@ -63,7 +63,7 @@ const Follow = () => {
 
   return (
     <List
-      loading={activitiesLoading}
+      // loading={activitiesLoading}
       renderItem={(item) => renderActivities(item)}
       dataSource={data}
       className={styles.activitiesList}
