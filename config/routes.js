@@ -197,6 +197,7 @@ export default [
       {
         path: '/article/detail',
         component: './Article/Viewer',
+        exact: false,
       },
       {
         path: '/article/edit',
