@@ -1,20 +1,21 @@
-import {LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined} from '@ant-design/icons';
-import {Button, Card, Col, Form, List, Row, Select, Tag, Radio, Space} from 'antd';
-import React from 'react';
-import {useRequest} from 'umi';
+import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Form, List, Row, Select, Tag, Radio, Space } from 'antd';
+import React, { useState } from 'react';
+import { useRequest } from 'umi';
 import ArticleListContent from './components/ArticleListContent';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
-import {queryFakeList3} from './service';
+import { queryFakeList3 } from './service';
 import styles from './style.less';
 
-const {Option} = Select;
+const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 5;
 
 const Articles = () => {
+  const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
-  const {data, reload, loading, loadMore, loadingMore} = useRequest(
+  const { data, reload, loading, loadMore, loadingMore } = useRequest(
     () => {
       return queryFakeList3({
         count: pageSize,
@@ -55,7 +56,7 @@ const Articles = () => {
     },
   ];
 
-  const IconText = ({type, text}) => {
+  const IconText = ({ type, text }) => {
     switch (type) {
       case 'star-o':
         return (
@@ -127,7 +128,7 @@ const Articles = () => {
       >
         {loadingMore ? (
           <span>
-            <LoadingOutlined/> 加载中...
+            <LoadingOutlined /> 加载中...
           </span>
         ) : (
           '加载更多'
@@ -171,11 +172,20 @@ const Articles = () => {
           <StandardFormRow title="owner" grid>
             <FormItem name="owner" noStyle>
               <Select
-                mode="multiple"
-                placeholder="选择 owner"
+                key="search_algorithm"
                 style={{
                   minWidth: '6rem',
                 }}
+                mode="multiple"
+                showSearch
+                placeholder="选择 owner"
+                open={open}
+                allowClear={true}
+                // onChange={onChange} // 选中 option，或 input 的 value 变化时，调用此函数
+                // onSearch={handleTitle} // 文本框值变化时回调
+                // onClear={handleTitle} // 清除内容时回调
+                optionFilterProp="children"
+                filterOption={(input, option) => option.children.indexOf(input) >= 0}
               >
                 {owners.map((owner) => (
                   <Option key={owner.id} value={owner.id}>
@@ -198,7 +208,7 @@ const Articles = () => {
                     style={{
                       maxWidth: 200,
                       width: '100%',
-                      color: "blue"
+                      color: 'blue',
                     }}
                   >
                     <Option value="complex_order">综合排序</Option>
@@ -215,7 +225,7 @@ const Articles = () => {
                     style={{
                       maxWidth: 200,
                       width: '100%',
-                      color: "blue"
+                      color: 'blue',
                     }}
                   >
                     <Option value="all_date">时间不限</Option>
@@ -234,7 +244,7 @@ const Articles = () => {
                     style={{
                       maxWidth: 200,
                       width: '100%',
-                      color: "blue"
+                      color: 'blue',
                     }}
                   >
                     <Option value="level_1">一级及以上博主</Option>
@@ -269,11 +279,11 @@ const Articles = () => {
             <List.Item
               key={item.id}
               actions={[
-                <IconText key="star" type="star-o" text={item.star}/>,
-                <IconText key="like" type="like-o" text={item.like}/>,
-                <IconText key="message" type="message" text={item.message}/>,
+                <IconText key="star" type="star-o" text={item.star} />,
+                <IconText key="like" type="like-o" text={item.like} />,
+                <IconText key="message" type="message" text={item.message} />,
               ]}
-              extra={<div className={styles.listItemExtra}/>}
+              extra={<div className={styles.listItemExtra} />}
             >
               <List.Item.Meta
                 title={
@@ -289,7 +299,7 @@ const Articles = () => {
                   </span>
                 }
               />
-              <ArticleListContent data={item}/>
+              <ArticleListContent data={item} />
             </List.Item>
           )}
         />

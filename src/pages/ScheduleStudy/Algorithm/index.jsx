@@ -251,21 +251,20 @@ const AlgorithmList = () => {
   });
 
   // 筛选难度
-  const handleLevel = async (value) => {
+  const handleLevel = (value) => {
     if (value) {
-      await setLevel(value);
+      setLevel(value);
     } else {
-      await setLevel('');
+      setLevel('');
     }
     search();
   };
   // 筛选题目完成状态
-  const handleStatus = async (value) => {
-    console.log(value);
+  const handleStatus = (value) => {
     if (value) {
-      await setStatus(value);
+      setStatus(value);
     } else {
-      await setStatus('');
+      setStatus('');
     }
     search();
   };
@@ -298,16 +297,19 @@ const AlgorithmList = () => {
         }
       }
     }
-    const arr = exam.filter(
+    const copyExam = exam.slice();
+    const arr = copyExam.filter(
       (item) =>
         item['level'][0].indexOf(level) !== -1 &&
         item['status'][0].indexOf(status) !== -1 &&
         item['title'].indexOf(title) !== -1 &&
         flag,
     );
+    console.log('arr前', arr);
+    console.log('exam前', exam);
     setExam(arr);
-    console.log('arr', arr);
-    console.log('exam', exam);
+    console.log('arr后', arr);
+    console.log('exam后', exam);
   };
 
   // 不太正确的筛选处理，暂时留着，看看有没有用
@@ -443,44 +445,43 @@ const AlgorithmList = () => {
       </Row>
 
       {/*显示筛选的条件*/}
-      {/*<Row>*/}
-      {/*  <Space>*/}
-      {/*    <Col>*/}
-      {/*      <Tag>*/}
-      {/*        <span>{level}</span>*/}
-      {/*        <CloseOutlined onClick={handleLevel}/>*/}
-      {/*      </Tag>*/}
-      {/*    </Col>*/}
-      {/*    <Col offset={1}>*/}
-      {/*      <Tag>*/}
-      {/*        <span>{status}</span>*/}
-      {/*        <CloseOutlined onClick={handleStatus}/>*/}
-      {/*      </Tag>*/}
-      {/*    </Col>*/}
-      {/*    <Col offset={1}>*/}
-      {/*      <div>*/}
-      {/*        {*/}
-      {/*          tags.map(item => (*/}
-      {/*            <Tag>*/}
-      {/*              <span>{item}</span>*/}
-      {/*              <CloseOutlined onClick={handleTags}/>*/}
-      {/*            </Tag>*/}
-      {/*          ))*/}
-      {/*        }*/}
-      {/*      </div>*/}
-      {/*    </Col>*/}
-      {/*    /!*{*!/*/}
-      {/*    /!*  filterArr.length > 0 ?*!/*/}
-      {/*    /!*    filterArr.map(item => (*!/*/}
-      {/*    /!*      <Col offset={1}>*!/*/}
-      {/*    /!*        <Tag>*!/*/}
-      {/*    /!*          <span >{item.value}<CloseOutlined /></span>*!/*/}
-      {/*    /!*        </Tag>*!/*/}
-      {/*    /!*      </Col>*!/*/}
-      {/*    /!*    )) : null*!/*/}
-      {/*    /!*}*!/*/}
-      {/*  </Space>*/}
-      {/*</Row>*/}
+      <Row>
+        <Space>
+          <Col>
+            <Tag>
+              <span>{level}</span>
+              {level ? <CloseOutlined onClick={handleLevel} /> : null}
+            </Tag>
+          </Col>
+          <Col offset={1}>
+            <Tag>
+              <span>{status}</span>
+              {status ? <CloseOutlined onClick={handleStatus} /> : null}
+            </Tag>
+          </Col>
+          <Col offset={1}>
+            <div>
+              {tags &&
+                tags.map((item) => (
+                  <Tag>
+                    <span>{item}</span>
+                    <CloseOutlined onClick={handleTags} />
+                  </Tag>
+                ))}
+            </div>
+          </Col>
+          {/*{*/}
+          {/*  filterArr.length > 0 ?*/}
+          {/*    filterArr.map(item => (*/}
+          {/*      <Col offset={1}>*/}
+          {/*        <Tag>*/}
+          {/*          <span >{item.value}<CloseOutlined /></span>*/}
+          {/*        </Tag>*/}
+          {/*      </Col>*/}
+          {/*    )) : null*/}
+          {/*}*/}
+        </Space>
+      </Row>
 
       <Table columns={columns} dataSource={exam} />
     </Card>
