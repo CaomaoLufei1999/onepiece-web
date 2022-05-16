@@ -1,24 +1,31 @@
-import React, { useState, useEffect, createElement } from 'react';
+import React, { useState, createElement, useEffect } from 'react';
 import moment from 'moment';
-import { List, Avatar, Button, Card, Comment, Tooltip, Skeleton, Divider } from 'antd';
+import { List, Avatar, Button, Card, Comment, Tooltip, Skeleton, Divider, Row } from 'antd';
 import {
   LikeOutlined,
   MessageOutlined,
   LikeFilled,
   DislikeFilled,
   DislikeOutlined,
+  MessageFilled,
+  ShareAltOutlined,
+  RightOutlined,
 } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import TextEditor from '../TextEditor';
+import { GridContent } from '@ant-design/pro-layout';
 
-const TopicInfo = () => {
+const TopicInfo = (props) => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [commentData, setCommentData] = useState([]);
-  const [showComment, setShowComment] = useState(false);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
+  const [data, setData] = useState([]);
+  const [showComment, setShowComment] = useState(false);
+  const [commentData, setCommentData] = useState([]);
+  const [isComment, setIsComment] = useState(false);
+  const [isReply, setIsReply] = useState(false);
   const [action, setAction] = useState(null);
+  const [flag, setFlag] = useState(false);
   // let count = 0;
   const loadMoreData = () => {
     if (loading) {
@@ -76,13 +83,40 @@ const TopicInfo = () => {
     }
   };
 
-  // 评论
+  // 回复
   const reply = () => {
-    setShowComment(!showComment);
+    setIsReply(!isReply);
+  };
+
+  // 查看评论
+  const checkComment = (e) => {
+    console.log(e.target);
+    const div = e.parentNode.parentNode.parentNode.parentNode.parentNode;
+    if (div.id.indexOf('commentId')) {
+      div.classList.remove('commentId');
+    } else {
+      div.classList.add('commentId');
+    }
+    console.log(div);
+    // if (e.hasClass('showComment')) {
+    //   e.removeClass('showComment');
+    // } else {
+    //   e.addClass('showComment');
+    // }
+  };
+
+  // 分享
+  const share = () => {
+    alert('分享');
+  };
+
+  // 跳转至详情页
+  const toDetailPage = () => {
+    window.location.href = window.location.pathname + '/detail';
   };
 
   return (
-    <Card>
+    <GridContent>
       <InfiniteScroll
         dataLength={data.length}
         next={loadMoreData}
@@ -187,7 +221,7 @@ const TopicInfo = () => {
           )}
         />
       </InfiniteScroll>
-    </Card>
+    </GridContent>
   );
 };
 

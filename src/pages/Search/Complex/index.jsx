@@ -1,19 +1,6 @@
 import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  List,
-  Row,
-  Select,
-  Tag,
-  Radio,
-  Space,
-  Skeleton,
-  Divider,
-} from 'antd';
-import React, { useState, useEffect } from 'react';
+import { Button, Card, Col, Form, List, Row, Select, Tag, Radio, Space } from 'antd';
+import React, { useState } from 'react';
 import ArticleListContent from './components/ArticleListContent';
 import StandardFormRow from './components/StandardFormRow';
 import TagSelect from './components/TagSelect';
@@ -25,6 +12,7 @@ const FormItem = Form.Item;
 const pageSize = 5;
 
 const Articles = () => {
+  const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -165,11 +153,20 @@ const Articles = () => {
           <StandardFormRow title="owner" grid>
             <FormItem name="owner" noStyle>
               <Select
-                mode="multiple"
-                placeholder="选择 owner"
+                key="search_algorithm"
                 style={{
                   minWidth: '6rem',
                 }}
+                mode="multiple"
+                showSearch
+                placeholder="选择 owner"
+                open={open}
+                allowClear={true}
+                // onChange={onChange} // 选中 option，或 input 的 value 变化时，调用此函数
+                // onSearch={handleTitle} // 文本框值变化时回调
+                // onClear={handleTitle} // 清除内容时回调
+                optionFilterProp="children"
+                filterOption={(input, option) => option.children.indexOf(input) >= 0}
               >
                 {owners.map((owner) => (
                   <Option key={owner.id} value={owner.id}>
