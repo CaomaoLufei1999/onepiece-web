@@ -1,42 +1,44 @@
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { CheckCard } from '@ant-design/pro-card';
 import { Avatar, Button, Card, Col, Form, List, Row, Select, Tag, Skeleton, Divider } from 'antd';
+import { history } from 'umi';
+import Data from './data';
 import StandardFormRow from '@/pages/Search/Articles/components/StandardFormRow';
 import TagSelect from '@/pages/Search/Articles/components/TagSelect';
 import styles from '@/pages/Search/Articles/style.less';
 import React, { useState, useEffect } from 'react';
-import ArticleListContent from '@/pages/Search/Articles/components/ArticleListContent';
-import { LikeOutlined, LoadingOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
+import BackEnd from './components/BackEnd';
+import DataBase from './components/DataBase';
+import FrontEnd from './components/FrontEnd';
+import Algorithm from './components/algorithm';
+import ProceduralLife from './components/ProceduralLife';
+import StudyNotes from './components/StudyNotes';
+import Other from './components/Other';
 
 const { Option } = Select;
 const FormItem = Form.Item;
-const pageSize = 15;
+const map = {
+  'back-end': 0,
+  database: 1,
+  'front-end': 2,
+  algorithm: 3,
+  'procedural-life': 4,
+  'study-notes': 5,
+  other: 6,
+};
 
-const Community = () => {
+const Community = (props) => {
+  const [temp, setTemp] = useState(
+    props.route.children[Data.index].path.split('/')[
+      props.route.children[Data.index].path.split('/').length - 1
+    ],
+  );
+
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
   const [owners, setOwners] = useState([]);
-  let count = 0;
-  const loadMoreData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    fetch(
-      `http://localhost:3000/Community_list?id_gte=${count * 10}&id_lte=${(count + 1) * 10 - 1}`,
-    )
-      .then((res) => res.json())
-      .then((body) => {
-        setData([...data, ...body]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-    count++;
-  };
+
   const loadOwnersData = () => {
     if (loading) {
       return;
@@ -54,8 +56,8 @@ const Community = () => {
   };
 
   useEffect(() => {
-    loadMoreData();
     loadOwnersData();
+    console.log('运行了没');
   }, []);
 
   const setOwner = () => {
@@ -78,49 +80,6 @@ const Community = () => {
     },
   };
 
-  const IconText = ({ type, text }) => {
-    switch (type) {
-      case 'star-o':
-        return (
-          <span>
-            <StarOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
-
-      case 'like-o':
-        return (
-          <span>
-            <LikeOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
-
-      case 'message':
-        return (
-          <span>
-            <MessageOutlined
-              style={{
-                marginRight: 8,
-              }}
-            />
-            {text}
-          </span>
-        );
-
-      default:
-        return null;
-    }
-  };
-
   return (
     <PageContainer>
       <GridContent>
@@ -137,7 +96,14 @@ const Community = () => {
               >
                 <StandardFormRow>
                   <Form.Item>
-                    <CheckCard.Group>
+                    <CheckCard.Group
+                      onChange={(value, index) => {
+                        history.push(`/community/${value}`);
+                        Data.index = map[value];
+                        setTemp(value);
+                      }}
+                      defaultValue="back-end"
+                    >
                       <CheckCard
                         title="后端开发"
                         avatar={
@@ -146,8 +112,9 @@ const Community = () => {
                             size="small"
                           />
                         }
+                        defaultChecked
                         size={'small'}
-                        value="SpringBoot"
+                        value="back-end"
                       />
                       <CheckCard
                         title="数据库"
@@ -157,7 +124,7 @@ const Community = () => {
                             size="small"
                           />
                         }
-                        value="SOFABoot"
+                        value="database"
                         size={'small'}
                       />
                       <CheckCard
@@ -169,18 +136,18 @@ const Community = () => {
                           />
                         }
                         size={'small'}
-                        value="NodeJS"
+                        value="front-end"
                       />
                       <CheckCard
                         title="算法"
                         avatar={
                           <Avatar
-                            src="https://gw.alipayobjects.com/zos/bmw-prod/2dd637c7-5f50-4d89-a819-33b3d6da73b6.svg"
+                            src="https://gw.alipayobjects.com/zos/bmw-prod/d12c3392-61fa-489e-a82c-71de0f888a8e.svg"
                             size="small"
                           />
                         }
                         size={'small'}
-                        value="SpringBoot"
+                        value="algorithm"
                       />
                       <CheckCard
                         title="程序人生"
@@ -191,7 +158,7 @@ const Community = () => {
                           />
                         }
                         size={'small'}
-                        value="SpringBoot"
+                        value="procedural-life"
                       />
                       <CheckCard
                         title="学习笔记"
@@ -202,7 +169,7 @@ const Community = () => {
                           />
                         }
                         size={'small'}
-                        value="SpringBoot"
+                        value="study-notes"
                       />
                       <CheckCard
                         title="其他"
@@ -213,7 +180,7 @@ const Community = () => {
                           />
                         }
                         size={'small'}
-                        value="SpringBoot"
+                        value="other"
                       />
                     </CheckCard.Group>
                   </Form.Item>
@@ -237,8 +204,8 @@ const Community = () => {
                       <TagSelect.Option value="cat8">类目八</TagSelect.Option>
                       <TagSelect.Option value="cat9">类目九</TagSelect.Option>
                       <TagSelect.Option value="cat10">类目十</TagSelect.Option>
-                      <TagSelect.Option value="cat10">类目十</TagSelect.Option>
-                      <TagSelect.Option value="cat10">类目十</TagSelect.Option>
+                      <TagSelect.Option value="cat11">类目十</TagSelect.Option>
+                      <TagSelect.Option value="cat12">类目十</TagSelect.Option>
                     </TagSelect>
                   </FormItem>
                 </StandardFormRow>
@@ -332,50 +299,21 @@ const Community = () => {
                 padding: '8px 32px 32px 32px',
               }}
             >
-              <InfiniteScroll
-                dataLength={data.length}
-                next={loadMoreData}
-                hasMore={data.length < 1000}
-                loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-                endMessage={<Divider plain>没有更多了！！！</Divider>}
-                scrollableTarget="scrollableDiv"
-              >
-                <List
-                  size="large"
-                  // loading={loading}
-                  rowKey="id"
-                  itemLayout="vertical"
-                  // loadMore={loadMoreDom}
-                  dataSource={data}
-                  renderItem={(item) => (
-                    <List.Item
-                      key={item.id}
-                      actions={[
-                        <IconText key="star" type="star-o" text={item.star} />,
-                        <IconText key="like" type="like-o" text={item.like} />,
-                        <IconText key="message" type="message" text={item.message} />,
-                      ]}
-                      extra={<div className={styles.listItemExtra} />}
-                    >
-                      <List.Item.Meta
-                        title={
-                          <a className={styles.listItemMetaTitle} href={item.href}>
-                            {item.title}
-                          </a>
-                        }
-                        description={
-                          <span>
-                            <Tag>Ant Design</Tag>
-                            <Tag>设计语言</Tag>
-                            <Tag>蚂蚁金服</Tag>
-                          </span>
-                        }
-                      />
-                      <ArticleListContent data={item} />
-                    </List.Item>
-                  )}
-                />
-              </InfiniteScroll>
+              {temp == 'back-end' ? (
+                <BackEnd />
+              ) : temp == 'database' ? (
+                <DataBase />
+              ) : temp == 'front-end' ? (
+                <FrontEnd />
+              ) : temp == 'algorithm' ? (
+                <Algorithm />
+              ) : temp == 'procedural-life' ? (
+                <ProceduralLife />
+              ) : temp == 'study-notes' ? (
+                <StudyNotes />
+              ) : temp == 'other' ? (
+                <Other />
+              ) : null}
             </Card>
           </Col>
         </Row>

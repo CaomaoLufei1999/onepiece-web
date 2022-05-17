@@ -132,6 +132,11 @@ export default [
     // component: './Admin',
     routes: [
       {
+        path: '/rank/list/blog',
+        name: 'blog',
+        component: './Rank',
+      },
+      {
         path: '/rank/list/total',
         name: 'total',
         component: './Rank',
@@ -141,11 +146,7 @@ export default [
         name: 'weekly',
         component: './Rank',
       },
-      {
-        path: '/rank/list/blog',
-        name: 'blog',
-        component: './Rank',
-      },
+
       {
         path: '/rank/list/content',
         name: 'content',
@@ -189,7 +190,47 @@ export default [
     name: 'blog',
     icon: 'edit',
     path: '/community',
+    // component: './Community',
+    // path: '/community/back-end',
     component: './Community',
+    exact: false,
+    routes: [
+      {
+        path: '/community/back-end',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/database',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/front-end',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/algorithm',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/procedural-life',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/study-notes',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/other',
+        component: './Community',
+        exact: false,
+      },
+    ],
   },
   {
     path: '/article',
