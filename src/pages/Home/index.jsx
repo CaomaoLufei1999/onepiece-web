@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Avatar, Skeleton, Row, Statistic, Col, Card, Button, Calendar, Badge, List } from 'antd';
+import { Link } from 'umi';
 import styles from './index.less';
 import RecommendUsers from '@/pages/Home/components/RecommendUsers';
 import { CalendarOutlined, NotificationOutlined, TeamOutlined } from '@ant-design/icons';
@@ -246,7 +247,7 @@ const Home = () => {
               className={styles.tabsCard}
               bordered={false}
               title={tabName}
-              extra={<a href="#">More</a>}
+              extra={<Link to={'/rank/list/blog'}>More</Link>}
             >
               {renderChildrenByTabKey(tabKey)}
             </Card>
@@ -289,7 +290,7 @@ const Home = () => {
                   公告
                 </span>
               }
-              extra={<a href="#">More</a>}
+              extra={<a href="#">More2</a>}
               style={{
                 marginBottom: 24,
               }}
@@ -328,7 +329,7 @@ const Home = () => {
                   优质作者
                 </span>
               }
-              extra={<a href="#">More</a>}
+              extra={<a href="#">More3</a>}
               style={{
                 marginBottom: 24,
               }}
@@ -337,7 +338,7 @@ const Home = () => {
                 padding: 10,
               }}
             >
-              {/* <RecommendUsers /> */}
+              <RecommendUsers />
             </Card>
           </Col>
         </Row>

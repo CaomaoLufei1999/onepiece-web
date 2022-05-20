@@ -50,7 +50,15 @@ const user = [
   '谭小仪',
   '仲尼',
 ];
-
+const field_arr = [
+  'back-end',
+  'database',
+  'front-end',
+  'algorithm',
+  'procedural-life',
+  'study-notes',
+  'other',
+];
 /**
  * 各个路径的后缀，也是数据的存储体
  */
@@ -91,9 +99,10 @@ let owners = []; //全站搜索的owner，飞哥说改成搜索框 /search/artic
  */
 for (let i = 0; i < 100; i++) {
   let temp = {
+    type: field_arr[i % 7],
     id: i,
     owner: user[i % 10],
-    title: titles[i % 8],
+    title: `${field_arr[i % 7]}+${titles[i % 8]}`,
     avatar: avatars[i % 8],
     cover: parseInt(`${i / 4}`, 10) % 2 === 0 ? covers[i % 4] : covers[3 - (i % 4)],
     status: ['active', 'exception', 'normal'][i % 3],
@@ -258,6 +267,7 @@ for (let i = 0; i < 100; i++) {
   Read_list.push(temp);
   home_recommend_list.push(temp);
   home_new_list.push(temp);
+  home_follow_data.push(temp);
   home_hot_list.push(temp);
   users_list.push(temp_2);
   topic_activity.push(temp_2);
@@ -438,23 +448,23 @@ for (let i = 0; i < 10; i++) {
     href: 'https://ant.design',
     desc: '2022年CSDN博客之星TOP8，CSDN博客专家，Java领域优质创作者，阿里巴巴全栈开发工程师。',
   });
-  home_follow_data.push({
-    id: `trend-${i}`,
-    updatedAt: new Date(),
-    user: {
-      name: user[i % 10],
-      avatar: avatars[i % 8],
-    },
-    group: {
-      name: '高逼格设计天团',
-      link: 'http://github.com/',
-    },
-    project: {
-      name: '六月迭代',
-      link: 'http://github.com/',
-    },
-    template: '在 @{group} 新建项目 @{project}',
-  });
+  // home_follow_data.push({
+  //   id: `trend-${i}`,
+  //   updatedAt: new Date(),
+  //   user: {
+  //     name: user[i % 10],
+  //     avatar: avatars[i % 8],
+  //   },
+  //   group: {
+  //     name: '高逼格设计天团',
+  //     link: 'http://github.com/',
+  //   },
+  //   project: {
+  //     name: '六月迭代',
+  //     link: 'http://github.com/',
+  //   },
+  //   template: '在 @{group} 新建项目 @{project}',
+  // });
 }
 
 article_viewer_info.push({

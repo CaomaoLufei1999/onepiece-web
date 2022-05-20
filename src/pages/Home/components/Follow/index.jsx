@@ -1,75 +1,86 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Divider, List, Skeleton, Tag } from 'antd';
+import { StarTwoTone, LikeOutlined, MessageFilled, LoadingOutlined } from '@ant-design/icons';
+import { Skeleton, Divider, Button, List, Tag } from 'antd';
+import { Link } from 'umi';
+import ArticleListContent from './ArticleListContent';
 import styles from './index.less';
-import Avatar from 'antd/es/avatar/avatar';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import moment from 'moment';
 
-const Follow = () => {
+const New = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-
-  const loadFollowData = () => {
+  let count = 0;
+  const loadMoreData = () => {
     if (loading) {
       return;
     }
-    fetch('http://localhost:3000/home_follow_data')
+    setLoading(true);
+    fetch(
+      `http://localhost:3000/home_follow_data?id_gte=${count * 8}&id_lte=${(count + 1) * 8 - 1}`,
+    )
       .then((res) => res.json())
       .then((body) => {
-        setData([...body]);
+        setData([...data, ...body]);
+
         setLoading(false);
       })
       .catch(() => {
         setLoading(false);
       });
+    count++;
   };
-
   useEffect(() => {
-    loadFollowData();
+    loadMoreData();
   }, []);
 
-  const renderActivities = (item) => {
-    const events = item.template.split(/@\{([^{}]*)\}/gi).map((key) => {
-      if (item[key]) {
-        return (
-          <a href={item[key].link} key={item[key].name}>
-            {item[key].name}
-          </a>
-        );
-      }
-
-      return key;
-    });
-    return (
-      <List.Item key={item.id}>
-        <List.Item.Meta
-          avatar={<Avatar src={item.user.avatar} />}
-          title={
-            <span>
-              <a className={styles.username}>{item.user.name}</a>
-              &nbsp;
-              <span className={styles.event}>{events}</span>
-            </span>
-          }
-          description={
-            <span className={styles.datetime} title={item.updatedAt}>
-              {moment(item.updatedAt).fromNow()}
-            </span>
-          }
-        />
-      </List.Item>
-    );
-  };
+  const IconText = ({ icon, text }) => (
+    <span>
+      {icon} {text}
+    </span>
+  ); // 获取tab列表数据
 
   return (
-    <List
-      // loading={activitiesLoading}
-      renderItem={(item) => renderActivities(item)}
-      dataSource={data}
-      className={styles.activitiesList}
-      size="large"
-    />
+    <InfiniteScroll
+      dataLength={data.length}
+      next={loadMoreData}
+      hasMore={data.length < 100}
+      loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+      endMessage={<Divider plain>暂时只有这么多哦！！！</Divider>}
+      scrollableTarget="scrollableDiv"
+    >
+      <List
+        size="large"
+        className={styles.articleList}
+        // loadMore={loadMoreDom}
+        // loading={loading}
+        rowKey="id"
+        itemLayout="vertical"
+        dataSource={data}
+        renderItem={(item) => (
+          <List.Item
+            key={item.id}
+            actions={[
+              <IconText key="star" icon={<StarTwoTone />} text={item.star} />,
+              <IconText key="like" icon={<LikeOutlined />} text={item.like} />,
+              <IconText key="message" icon={<MessageFilled />} text={item.message} />,
+            ]}
+          >
+            <List.Item.Meta
+              title={<Link to={`/article/detail/${item.id}`}>{item.title}</Link>}
+              description={
+                <span>
+                  <Tag>Ant Design</Tag>
+                  <Tag>设计语言</Tag>
+                  <Tag>蚂蚁金服</Tag>
+                </span>
+              }
+            />
+            <ArticleListContent data={item} />
+          </List.Item>
+        )}
+      />
+    </InfiniteScroll>
   );
 };
 
-export default Follow;
+export default New;
