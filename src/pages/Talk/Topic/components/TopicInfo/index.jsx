@@ -1,6 +1,17 @@
 import React, { useState, createElement, useEffect } from 'react';
 import moment from 'moment';
-import { List, Avatar, Button, Card, Comment, Tooltip, Skeleton, Divider, Row } from 'antd';
+import {
+  List,
+  Avatar,
+  Button,
+  Card,
+  Comment,
+  Tooltip,
+  Skeleton,
+  Divider,
+  Row,
+  Collapse,
+} from 'antd';
 import {
   LikeOutlined,
   MessageOutlined,
@@ -12,20 +23,17 @@ import {
   RightOutlined,
 } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Link } from 'umi';
 import TextEditor from '../TextEditor';
 import { GridContent } from '@ant-design/pro-layout';
 
 const TopicInfo = (props) => {
+  const { showComment } = props;
   const [loading, setLoading] = useState(false);
-  const [likes, setLikes] = useState(0);
-  const [dislikes, setDislikes] = useState(0);
   const [data, setData] = useState([]);
-  const [showComment, setShowComment] = useState(false);
   const [commentData, setCommentData] = useState([]);
-  const [isComment, setIsComment] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const [action, setAction] = useState(null);
-  const [flag, setFlag] = useState(false);
   // let count = 0;
   const loadMoreData = () => {
     if (loading) {
@@ -60,25 +68,23 @@ const TopicInfo = (props) => {
   }, []);
 
   // 赞
-  const like = () => {
-    let num = likes;
+  const like = (value) => {
     if (action === 'liked') {
-      setLikes(--num);
+      // --value;
       setAction(null);
     } else {
-      setLikes(++num);
+      // ++value;
       setAction('liked');
     }
   };
 
   // 踩
-  const dislike = () => {
-    let num = dislikes;
+  const dislike = (value) => {
     if (action === 'disliked') {
-      setDislikes(--num);
+      // --value;
       setAction(null);
     } else {
-      setDislikes(++num);
+      // ++value;
       setAction('disliked');
     }
   };
@@ -89,20 +95,8 @@ const TopicInfo = (props) => {
   };
 
   // 查看评论
-  const checkComment = (e) => {
-    console.log(e.target);
-    const div = e.parentNode.parentNode.parentNode.parentNode.parentNode;
-    if (div.id.indexOf('commentId')) {
-      div.classList.remove('commentId');
-    } else {
-      div.classList.add('commentId');
-    }
-    console.log(div);
-    // if (e.hasClass('showComment')) {
-    //   e.removeClass('showComment');
-    // } else {
-    //   e.addClass('showComment');
-    // }
+  const checkComment = (value) => {
+    return !value;
   };
 
   // 分享
@@ -112,115 +106,141 @@ const TopicInfo = (props) => {
 
   // 跳转至详情页
   const toDetailPage = () => {
-    window.location.href = window.location.pathname + '/detail';
+    window.location.href = '/talk/topic/detail';
   };
 
   return (
     <GridContent>
-      <InfiniteScroll
-        dataLength={data.length}
-        next={loadMoreData}
-        hasMore={data.length < 10}
-        loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-        endMessage={<Divider plain>没有更多了~~ 🤐</Divider>}
-        scrollableTarget="scrollableDiv"
-      >
-        <List
-          itemLayout="vertical"
-          size="large"
-          dataSource={data}
-          renderItem={(item) => (
-            <List.Item
-              key={item.id}
-              actions={[
-                <Tooltip key="comment-basic-like" title="点赞">
-                  <span onClick={like}>
-                    {React.createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-                    <span>{item.like}</span>
-                  </span>
-                </Tooltip>,
-                <Tooltip key="comment-basic-dislike" title="踩">
-                  <span onClick={dislike}>
-                    {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
-                    <span>{item.disLike}</span>
-                  </span>
-                </Tooltip>,
-                <Tooltip key="comment-basic-dislike" title="评论">
-                  <span onClick={reply}>
-                    {React.createElement(MessageOutlined)}
-                    <span>回复</span>
-                  </span>
-                </Tooltip>,
-              ]}
-              extra={<Button type="primary">关注</Button>}
-            >
-              <Comment
-                author={
-                  <a>
-                    <strong>{item.author}</strong>
-                  </a>
-                }
-                avatar={<Avatar src={item.avatar} alt="Han Solo" />}
-                content={<p>{item.content}</p>}
-                datetime={
-                  <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-                    <span>{moment().fromNow()}</span>
-                  </Tooltip>
-                }
-              />
-              {showComment === false ? null : (
+      <Card>
+        <InfiniteScroll
+          dataLength={data.length}
+          next={loadMoreData}
+          hasMore={data.length < 10}
+          loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+          endMessage={<Divider plain>没有更多了~~ 🤐</Divider>}
+          scrollableTarget="scrollableDiv"
+        >
+          <List
+            itemLayout="vertical"
+            size="large"
+            dataSource={data}
+            renderItem={(item) => {
+              let show = false;
+              return (
                 <div>
-                  {/* 自己评论 */}
-                  <TextEditor />
+                  <List.Item
+                    key={item.id}
+                    actions={[
+                      <Tooltip key="comment-basic-like" title="点赞">
+                        <span onClick={() => like(item.like)}>
+                          {React.createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
+                          <span>{item.like}</span>
+                        </span>
+                      </Tooltip>,
+                      <Tooltip key="comment-basic-dislike" title="踩">
+                        <span onClick={() => dislike(item.disLike)}>
+                          {React.createElement(
+                            action === 'disliked' ? DislikeFilled : DislikeOutlined,
+                          )}
+                          <span>{item.disLike}</span>
+                        </span>
+                      </Tooltip>,
+                      <Tooltip>
+                        <Collapse ghost>
+                          <Collapse.Panel header="评论" key="comment-basic-dislike">
+                            <p>你好</p>
+                          </Collapse.Panel>
+                        </Collapse>
+                      </Tooltip>,
+                      // <Tooltip key="comment-basic-dislike" title="评论">
+                      //   <span onClick={() => {show = !show}}>
+                      //     {React.createElement(MessageOutlined)}
+                      //     <span>回复</span>
+                      //   </span>
+                      // </Tooltip>,
+                    ]}
+                    extra={<Button type="primary">关注</Button>}
+                  >
+                    <Comment
+                      author={
+                        <a>
+                          <strong>{item.author}</strong>
+                        </a>
+                      }
+                      avatar={<Avatar src={item.avatar} alt="头像" />}
+                      content={<p>{item.content}</p>}
+                      datetime={
+                        <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+                          <span>{moment().fromNow()}</span>
+                        </Tooltip>
+                      }
+                    />
+                  </List.Item>
 
-                  {/* 他人评论 */}
-                  <List
-                    className="comment-list"
-                    header={`您有 ${data.length} 条评论`}
-                    itemLayout="horizontal"
-                    dataSource={commentData}
-                    renderItem={(item) => (
-                      <Comment
-                        actions={[
-                          <Tooltip key="comment-basic-like" title="点赞">
-                            <span onClick={like}>
-                              {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-                              <span>{item.like}</span>
-                            </span>
-                          </Tooltip>,
-                          <Tooltip key="comment-basic-dislike" title="踩">
-                            <span onClick={dislike}>
-                              {React.createElement(
-                                action === 'disliked' ? DislikeFilled : DislikeOutlined,
-                              )}
-                              <span>{item.disLike}</span>
-                            </span>
-                          </Tooltip>,
-                          <Tooltip key="comment-basic-dislike" title="评论">
-                            <span onClick={reply}>
-                              {React.createElement(MessageOutlined)}
-                              <span>回复</span>
-                            </span>
-                          </Tooltip>,
-                        ]}
-                        title={<a href={item.href}>{item.title}</a>}
-                        author={<strong>{item.author}</strong>}
-                        avatar={<Avatar />}
-                        content={<span>{item.content}</span>}
-                        datetime={
-                          <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-                            <span>{moment().fromNow()}</span>
-                          </Tooltip>
-                        }
+                  <div style={show === false ? { display: 'none' } : null}>
+                    {/* 自己评论 */}
+                    <TextEditor isShow={true} isAvatar={true} />
+
+                    {/* 他人评论 */}
+                    {showComment === true ? (
+                      <List
+                        className="comment-list"
+                        header={`您有 ${data.length} 条评论`}
+                        itemLayout="horizontal"
+                        dataSource={commentData}
+                        renderItem={(item) => (
+                          <Comment
+                            actions={[
+                              <Tooltip key="comment-basic-like" title="点赞">
+                                <span onClick={() => like(item.like)}>
+                                  {React.createElement(
+                                    action === 'liked' ? LikeFilled : LikeOutlined,
+                                  )}
+                                  <span>{item.like}</span>
+                                </span>
+                              </Tooltip>,
+                              <Tooltip key="comment-basic-dislike" title="踩">
+                                <span onClick={() => dislike(item.disLike)}>
+                                  {React.createElement(
+                                    action === 'disliked' ? DislikeFilled : DislikeOutlined,
+                                  )}
+                                  <span>{item.disLike}</span>
+                                </span>
+                              </Tooltip>,
+                              <Tooltip key="comment-basic-dislike" title="评论">
+                                <span onClick={reply}>
+                                  {React.createElement(MessageOutlined)}
+                                  <span>回复</span>
+                                </span>
+                              </Tooltip>,
+                            ]}
+                            title={<a href={item.href}>{item.title}</a>}
+                            author={<strong>{item.author}</strong>}
+                            avatar={<Avatar />}
+                            content={<span>{item.content}</span>}
+                            datetime={
+                              <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+                                <span>{moment().fromNow()}</span>
+                              </Tooltip>
+                            }
+                          />
+                        )}
                       />
+                    ) : (
+                      <Link to={'/talk/topic/detail?' + item.href}>
+                        <Button>
+                          查看更多
+                          <RightOutlined />
+                        </Button>
+                      </Link>
                     )}
-                  />
+                  </div>
                 </div>
-              )}
-            </List.Item>
-          )}
-        />
-      </InfiniteScroll>
+              );
+            }}
+          />
+        </InfiniteScroll>
+      </Card>
     </GridContent>
   );
 };

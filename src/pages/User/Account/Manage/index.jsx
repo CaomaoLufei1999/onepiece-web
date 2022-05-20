@@ -49,6 +49,7 @@ import {
   UsergroupAddOutlined,
 } from '@ant-design/icons';
 import ProList from '@ant-design/pro-list/src';
+import { Link } from 'umi';
 
 const { TextArea } = Input;
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
@@ -456,7 +457,7 @@ const ContentManage = () => {
   return (
     <PageContainer
       header={{
-        title: 'OnePiece 创作中心',
+        title: '内容管理',
         ghost: true,
       }}
     >
@@ -513,9 +514,11 @@ const ContentManage = () => {
               dateFormatter="string"
               headerTitle="文章列表"
               toolBarRender={() => [
-                <Button key="button" icon={<PlusOutlined />} type="primary">
-                  发布新文章
-                </Button>,
+                <Link to="/account/write-blog">
+                  <Button key="button" icon={<PlusOutlined />} type="primary">
+                    发布新文章
+                  </Button>
+                </Link>,
               ]}
             />
           </TabPane>

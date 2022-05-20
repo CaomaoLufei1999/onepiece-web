@@ -4,6 +4,7 @@ import TopicInfo from './components/TopicInfo';
 import UserInfo from './components/UserInfo';
 import { GridContent } from '@ant-design/pro-layout';
 import React, { useState, useEffect, createElement } from 'react';
+import { Link } from 'umi';
 
 const Topic = () => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +15,7 @@ const Topic = () => {
       return;
     }
     setLoading(true);
-    fetch(`http://localhost:3000/topic_data`)
+    fetch(`http://localhost:3000/topic_activity?id_lte=10`)
       .then((res) => res.json())
       .then((body) => {
         setData([...body]);
@@ -29,17 +30,12 @@ const Topic = () => {
     loadMoreData();
   }, []);
 
-  // 跳转至话题专区话题分类列表页
-  const ToListPage = () => {
-    window.location.href = window.location.pathname + '/activities';
-  };
-
   return (
     <GridContent>
       <Row gutter={[16, 16]}>
         <Col span={17}>
           <Card>
-            <TextEditor isShow={true} isAvatar={false} />
+            <TextEditor isShow={true} isAvatar={false} isBordered={false} isChoiceActivity={true} />
           </Card>
         </Col>
 
@@ -55,7 +51,11 @@ const Topic = () => {
           <Card
             title="热门活动"
             style={{ width: 300 }}
-            actions={[<Button onClick={ToListPage}>查看更多</Button>]}
+            actions={[
+              <Link to="/talk/topic/activities">
+                <Button>查看更多</Button>
+              </Link>,
+            ]}
           >
             <List
               itemLayout="horizontal"
@@ -73,7 +73,7 @@ const Topic = () => {
                         }}
                       >
                         <span>{item.title}</span>
-                        <span>{item.num}</span>
+                        <span>{item.browseNum}</span>
                       </div>
                     }
                   />

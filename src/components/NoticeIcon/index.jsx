@@ -1,9 +1,9 @@
-import {useEffect, useState} from 'react';
-import {Tag, message} from 'antd';
-import {groupBy} from 'lodash';
+import { useEffect, useState } from 'react';
+import { Tag, message } from 'antd';
+import { groupBy } from 'lodash';
 import moment from 'moment';
-import {useModel, useRequest} from 'umi';
-import {getNotices} from '@/services/ant-design-pro/api';
+import { useModel, useRequest } from 'umi';
+import { getNotices } from '@/services/ant-design-pro/api';
 import NoticeIcon from './NoticeIcon';
 import styles from './index.less';
 
@@ -13,7 +13,7 @@ const getNoticeData = (notices) => {
   }
 
   const newNotices = notices.map((notice) => {
-    const newNotice = {...notice};
+    const newNotice = { ...notice };
 
     if (newNotice.datetime) {
       newNotice.datetime = moment(notice.datetime).fromNow();
@@ -64,10 +64,11 @@ const getUnreadData = (noticeData) => {
 };
 
 const NoticeIconView = () => {
-  const {initialState} = useModel('@@initialState');
-  const {currentUser} = initialState || {};
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
   const [notices, setNotices] = useState([]);
-  const {data} = useRequest(getNotices);
+  const [title, setTitle] = useState('likeAndStar');
+  const { data } = useRequest(getNotices);
   useEffect(() => {
     setNotices(data || []);
   }, [data]);
@@ -77,7 +78,7 @@ const NoticeIconView = () => {
   const changeReadState = (id) => {
     setNotices(
       notices.map((item) => {
-        const notice = {...item};
+        const notice = { ...item };
 
         if (notice.id === id) {
           notice.read = true;
@@ -89,9 +90,11 @@ const NoticeIconView = () => {
   };
 
   const clearReadState = (title, key) => {
+    console.log(title, key, 'ddd');
+    setTitle(key);
     setNotices(
       notices.map((item) => {
-        const notice = {...item};
+        const notice = { ...item };
 
         if (notice.type === key) {
           notice.read = true;
@@ -114,11 +117,12 @@ const NoticeIconView = () => {
       loading={false}
       clearText="清空"
       viewMoreText="查看更多"
-      onViewMore={() => message.info('Click on view more')}
+      viewMoreHref="/account/message"
+      // onViewMore={() => message.info('Click on view more')}
       clearClose
     >
       <NoticeIcon.Tab
-        tabKey="like-message"
+        tabKey="likeAndStar"
         count={unreadMsg.notification}
         list={noticeData.notification}
         title="点赞"
@@ -126,7 +130,7 @@ const NoticeIconView = () => {
         showViewMore
       />
       <NoticeIcon.Tab
-        tabKey="comment-message"
+        tabKey="comment"
         count={unreadMsg.message}
         list={noticeData.message}
         title="评论"
@@ -134,7 +138,7 @@ const NoticeIconView = () => {
         showViewMore
       />
       <NoticeIcon.Tab
-        tabKey="follow-message"
+        tabKey="follow"
         title="关注"
         emptyText="你已完成所有待办"
         count={unreadMsg.event}
@@ -142,7 +146,7 @@ const NoticeIconView = () => {
         showViewMore
       />
       <NoticeIcon.Tab
-        tabKey="notice-message"
+        tabKey="chat"
         count={unreadMsg.notification}
         list={noticeData.notification}
         title="私信"

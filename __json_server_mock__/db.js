@@ -83,8 +83,7 @@ let home_user_data = []; //主页的用户数据 /home
 let home_good_author_list = []; //主页的推荐用户数据，显示不出来这个模块 /home
 let topic_info = []; //灌水专区的用户数据 /talk/topic
 let topic_info_comment = []; //灌水专区的评论数据 /talk/topic
-let topic_data = []; //灌水专区的热门活动模块的数据 /talk/topic
-let topic_activity = []; //灌水专区的更多活动列表 /talk/topic/activities
+let topic_activity = []; //灌水专区的活动列表 /talk/topic/activities
 let owners = []; //全站搜索的owner，飞哥说改成搜索框 /search/articles
 
 /**
@@ -135,6 +134,7 @@ for (let i = 0; i < 100; i++) {
   };
   let temp_2 = {
     id: i + 1,
+    title: '灌水乐园',
     gender: 'male',
     name: {
       title: 'Mr',
@@ -396,6 +396,7 @@ for (let i = 0; i < 100; i++) {
 
 for (let i = 0; i < 10; i++) {
   const obj = {
+    id: i,
     author: user[i % 10],
     href: 'https://ant.design',
     title: titles[i % 8],
@@ -418,7 +419,6 @@ for (let i = 0; i < 10; i++) {
     content:
       'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully andefficiently.',
   });
-  topic_data.push({ id: i, title: '你好世界', num: 666 });
   topic_info.push(obj);
   topic_info_comment.push(obj);
   owners.push({
@@ -503,7 +503,6 @@ module.exports = () => {
     topic_activity,
     topic_info,
     topic_info_comment,
-    topic_data,
     Read_list,
     article_viewer_comment,
     article_viewer_content,

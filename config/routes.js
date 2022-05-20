@@ -54,6 +54,10 @@ export default [
             component: './User/Account/Setting',
           },
           {
+            path: '/account/write-blog',
+            component: './Article/Editor',
+          },
+          {
             // name: 'message',
             path: '/account/message',
             component: './User/Account/Message',
@@ -62,6 +66,10 @@ export default [
             // name: 'message',
             path: '/account/control-blog',
             component: './User/Account/Manage',
+          },
+          {
+            path: '/account/history',
+            component: './User/Account/Center',
           },
           {
             // name: 'chat',
@@ -181,6 +189,11 @@ export default [
         component: './Talk/Topic/DetailPage',
       },
       {
+        path: '/talk/advice',
+        name: 'advice',
+        component: './Talk/Advice',
+      },
+      {
         component: './404',
       },
     ],
@@ -226,8 +239,8 @@ export default [
       {
         path: '/schedule-study/program',
         name: 'program',
-        hideInMenu: true, //隐藏程序场景题
         component: './ScheduleStudy/Program',
+        disabled: true,
       },
       {
         component: './404',
@@ -238,33 +251,37 @@ export default [
     path: '/knowledge-tree',
     name: 'knowledge-tree',
     icon: 'cluster',
-    hideInMenu: true, // 隐藏知识树
     component: './Admin',
     routes: [
       {
         path: '/knowledge-tree/java',
         name: 'java',
         component: './Home',
+        disabled: true,
       },
       {
         path: '/knowledge-tree/python',
         name: 'python',
         component: './Home',
+        disabled: true,
       },
       {
         path: '/knowledge-tree/web',
         name: 'web',
         component: './Home',
+        disabled: true,
       },
       {
         path: '/knowledge-tree/precious',
         name: 'precious',
         component: './Home',
+        disabled: true,
       },
       {
         path: '/knowledge-tree/other',
         name: 'other',
         component: './Home',
+        disabled: true,
       },
       {
         component: './404',
@@ -285,8 +302,9 @@ export default [
   {
     name: 'about-me',
     icon: 'user',
-    path: '/about-me',
-    component: './TableList',
+    path: 'https://blog.csdn.net/weixin_43591980?type=blog',
+    // path: '/about-me',
+    // component: './TableList',
   },
   {
     path: '/tools',
