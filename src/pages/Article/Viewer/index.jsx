@@ -72,6 +72,7 @@ import {
   LikeOutlined,
   LikeTwoTone,
   MessageOutlined,
+  MoneyCollectOutlined,
   NotificationOutlined,
   OrderedListOutlined,
   StarFilled,
@@ -179,6 +180,17 @@ const ArticleDetail = (props) => {
             </span>
           }
           value={articleInfo.starNum}
+        />
+      </div>
+      <div className={styles.statItem}>
+        {/*<Statistic title={<span><LikeFilled/> 点赞总数</span>} value={666}/>*/}
+        <Statistic
+          title={
+            <span>
+              <MessageOutlined /> 评论总数
+            </span>
+          }
+          value={articleInfo.totalComment}
         />
       </div>
     </div>
@@ -309,11 +321,18 @@ const ArticleDetail = (props) => {
             <Card
               actions={[
                 // <LikeOutlined key="like"/>,
-                <LikeTwoTone key="like" />,
-                <DislikeOutlined key="dislike" />,
-                // <StarOutlined key="star"/>,
-                <StarTwoTone key="star" />,
-                <MessageOutlined key="comment" />,
+                <span>
+                  <LikeTwoTone key="like" />
+                  点赞
+                </span>,
+                <span>
+                  <StarTwoTone key="like" />
+                  收藏
+                </span>,
+                <span>
+                  <MessageOutlined key="like" />
+                  评论
+                </span>,
               ]}
             >
               <>
@@ -325,7 +344,24 @@ const ArticleDetail = (props) => {
                 <span style={{ marginLeft: 10, fontWeight: 'bold', marginRight: 10 }}>
                   <a>{articleInfo.author}</a>
                 </span>
-                <Button type="default" shape="round" icon={'关 注'} size={'small'} />
+                <Button
+                  type="default"
+                  shape="round"
+                  icon={'关 注'}
+                  size={'small'}
+                  style={{ marginRight: 5 }}
+                />
+                <Button
+                  type="primary"
+                  shape="round"
+                  icon={
+                    <span>
+                      <MoneyCollectOutlined key="like" /> 打赏作者
+                    </span>
+                  }
+                  size={'small'}
+                  danger={true}
+                ></Button>
               </>
             </Card>
             <Card style={{ marginTop: 20 }} title="评论区">

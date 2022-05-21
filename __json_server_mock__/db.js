@@ -474,6 +474,7 @@ article_viewer_info.push({
   tags: ['Java', 'JavaScript', 'React'],
   readNum: 56,
   collectNum: 8,
+  totalComment: 18,
   starNum: 2223,
 });
 
