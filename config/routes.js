@@ -269,6 +269,11 @@ export default [
       {
         path: '/schedule-study/algorithm',
         name: 'algorithm',
+        component: './ScheduleStudy/AlgorithmList',
+      },
+      {
+        path: '/schedule-study/algorithm/detail',
+        hideChildrenInMenu:true,
         component: './ScheduleStudy/Algorithm',
       },
       {

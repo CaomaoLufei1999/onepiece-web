@@ -1,491 +1,332 @@
-import { Card, List, Form, Table, Tag, Space, Select, Radio, Row, Col } from 'antd';
+import { Button, Card, Col, Drawer, Row, Select, Space, Tag } from 'antd';
 import {
-  CheckCircleTwoTone,
-  CloseCircleTwoTone,
-  QuestionCircleTwoTone,
-  CloseOutlined,
+  CaretRightOutlined,
+  CoffeeOutlined,
+  FieldTimeOutlined,
+  FileTextOutlined,
+  SolutionOutlined,
 } from '@ant-design/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { GridContent, PageContainer } from '@ant-design/pro-layout';
 
-const AlgorithmList = () => {
-  const [level, setLevel] = useState('');
-  const [status, setStatus] = useState('');
-  const [title, setTitle] = useState('');
-  const [tags, setTags] = useState([]);
-  const [filterArr, setFilterArr] = useState([]);
-  const [exam, setExam] = useState([]);
+import './index.less';
+import ProblemInfo from '@/pages/ScheduleStudy/components/ProblemInfo';
+import CommentInfo from '@/pages/ScheduleStudy/components/CommentInfo';
+import SolutionInfo from '@/pages/ScheduleStudy/components/SolutionInfo';
+import CommitInfo from '@/pages/ScheduleStudy/components/CommitInfo';
 
-  const levelArr = [
-    { class: 'easy', value: '简单', color: '#00AF9B' },
-    { class: 'mid', value: '中等', color: '#FFBE00' },
-    { class: 'hard', value: '困难', color: '#FF2D55' },
-  ];
-  const statusArr = [
-    { class: 'unBegin', value: '未开始', color: '#262626' },
-    { class: 'pass', value: '已通过', color: '#00AF9B' },
-    { class: 'try', value: '尝试过', color: '#FFBE00' },
-  ];
-  const tagsArr = [
-    { class: '', value: '动态规划' },
-    { class: '', value: '回溯' },
-    { class: '', value: '二叉树' },
-    { class: '', value: '数组' },
-    { class: '', value: '链表' },
-    { class: '', value: '哈希表' },
-    { class: '', value: '堆' },
-    { class: '', value: '栈' },
-    { class: '', value: '队列' },
-    { class: '', value: '队列图' },
-  ];
+import { UnControlled as CodeMirror } from 'react-codemirror2';
+import 'codemirror/lib/codemirror.js';
+import 'codemirror/lib/codemirror.css';
+// 主题风格 https://codemirror.net/demo/theme.html#dracula
+import 'codemirror/theme/solarized.css';
+import 'codemirror/theme/dracula.css';
+import 'codemirror/theme/blackboard.css';
+import 'codemirror/theme/idea.css';
+import 'codemirror/theme/eclipse.css';
+// 代码模式，clike 是包含java,c++等模式的
+import 'codemirror/mode/css/css';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/xml/xml.js';
+import 'codemirror/mode/python/python.js';
+import 'codemirror/mode/perl/perl.js';
+import 'codemirror/mode/clike/clike.js';
+// ctrl+空格代码提示补全
+import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/addon/hint/show-hint';
+import 'codemirror/addon/lint/lint.js'; // 错误校验
+import 'codemirror/addon/lint/lint.css'; // 代码错误提示
+import 'codemirror/addon/hint/anyword-hint.js';
+// import 'codemirror/addon/hint/javascript-hint'
+// 代码高亮
+import 'codemirror/addon/selection/active-line'; // 当前行高亮
+// 折叠代码
+import 'codemirror/addon/fold/foldgutter.css';
+import 'codemirror/addon/fold/foldcode.js';
+import 'codemirror/addon/fold/foldgutter.js';
+import 'codemirror/addon/fold/brace-fold.js';
+import 'codemirror/addon/fold/comment-fold.js';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/edit/matchBrackets';
 
-  const columns = [
-    {
-      title: '题号',
-      dataIndex: 'number',
-      key: 'number',
-      sorter: (a, b) => a.number - b.number,
-    },
-    {
-      title: '标题',
-      dataIndex: 'title',
-      key: 'title',
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: '标签',
-      dataIndex: 'tags',
-      key: 'tags',
-      render: (tags) => (
-        <>
-          {tags &&
-            tags.map((tag) => {
-              return <Tag key={tag}>{tag}</Tag>;
-            })}
-        </>
-      ),
-    },
-    {
-      title: '题解数量',
-      dataIndex: 'resolveCount',
-      key: 'resolveCount',
-      sorter: (a, b) => a.resolveCount - b.resolveCount,
-    },
-    {
-      title: '通过率',
-      dataIndex: 'passingRate',
-      key: 'passingRate',
-      sorter: (a, b) => a.passingRate - b.passingRate,
-    },
-    {
-      title: '难度',
-      key: 'level',
-      dataIndex: 'level',
-      render: (levels) => (
-        <>
-          {levels &&
-            levels.map((level) => {
-              let color = '';
-              let tagClass = '';
-              if (level === levelArr[2].value) {
-                color = levelArr[2].color;
-                tagClass = levelArr[2].class;
-              }
-              if (level === levelArr[1].value) {
-                color = levelArr[1].color;
-                tagClass = levelArr[1].class;
-              }
-              if (level === levelArr[0].value) {
-                color = levelArr[0].color;
-                tagClass = levelArr[0].class;
-              }
-              return (
-                <Tag color={color} key={tagClass}>
-                  {level}
-                </Tag>
-              );
-            })}
-        </>
-      ),
-      sorter: (a, b) => a.level - b.level,
-    },
-    {
-      title: '状态',
-      key: 'status',
-      dataIndex: 'status',
-      render: (status) => (
-        <>
-          {status &&
-            status.map((item) => {
-              if (item === statusArr[1].value) {
-                return (
-                  <div key={item}>
-                    <Space size="middle">
-                      <CheckCircleTwoTone twoToneColor="#52c41a" />
-                      <a>{item}</a>
-                    </Space>
-                  </div>
-                );
-              }
-
-              if (item === statusArr[0].value) {
-                return (
-                  <div key={item}>
-                    <Space size="middle">
-                      <QuestionCircleTwoTone twoToneColor="#cc5500" />
-                      <a>{item}</a>
-                    </Space>
-                  </div>
-                );
-              }
-
-              if (item === statusArr[2].value) {
-                return (
-                  <div key={item}>
-                    <Space size="middle">
-                      <CloseCircleTwoTone twoToneColor="#fe0202" />
-                      <a>{item}</a>
-                    </Space>
-                  </div>
-                );
-              }
-            })}
-        </>
-      ),
-    },
-  ];
-  const data = [
-    {
-      key: '2',
-      number: 8,
-      title: '多重背包问题 II',
-      tags: ['动态规划', '字符串'],
-      resolveCount: '12',
-      passingRate: '666',
-      level: ['困难'],
-      status: ['已通过'],
-    },
-    {
-      key: '3',
-      number: 10,
-      title: '多重背包问题 III',
-      tags: ['链表', '数组'],
-      resolveCount: '0',
-      passingRate: '666',
-      level: ['简单'],
-      status: ['未开始'],
-    },
-    {
-      key: '4',
-      number: 101,
-      title: '多重背包问题 III',
-      tags: ['链表', '栈'],
-      resolveCount: '0',
-      passingRate: '666',
-      level: ['中等'],
-      status: ['未开始'],
-    },
-    {
-      key: '5',
-      number: 103,
-      title: '多重背包问题 III',
-      tags: ['图', '数组'],
-      resolveCount: '99',
-      passingRate: '666',
-      level: ['中等'],
-      status: ['尝试过'],
-    },
-    {
-      key: '6',
-      number: 77,
-      title: '多重背包问题 I',
-      tags: ['数', '图'],
-      resolveCount: '223',
-      passingRate: '666',
-      level: ['简单'],
-      status: ['已通过'],
-    },
-    {
-      key: '7',
-      number: 88,
-      title: '多重背包问题 II',
-      tags: ['链表', '堆'],
-      resolveCount: '12',
-      passingRate: '666',
-      level: ['困难'],
-      status: ['已通过'],
-    },
-    {
-      key: '8',
-      number: 32,
-      title: '多重背包问题 III',
-      tags: ['堆', '栈'],
-      resolveCount: '0',
-      passingRate: '666',
-      level: ['困难'],
-      status: ['未开始'],
-    },
-    {
-      key: '9',
-      number: 102,
-      title: '多重背包问题 III',
-      label: ['二叉树', '回溯'],
-      resolveCount: '0',
-      passingRate: '666',
-      level: ['中等'],
-      status: ['未开始'],
-    },
-    {
-      key: '10',
-      number: 113,
-      title: '多重背包问题 III',
-      tags: ['回溯', '链表'],
-      resolveCount: '99',
-      passingRate: '666',
-      level: ['中等'],
-      status: ['尝试过'],
-    },
-  ];
-
-  useEffect(() => {
-    setExam(data);
-  });
-
-  // 筛选难度
-  const handleLevel = (value) => {
-    if (value) {
-      setLevel(value);
-    } else {
-      setLevel('');
-    }
-    search();
-  };
-  // 筛选题目完成状态
-  const handleStatus = (value) => {
-    if (value) {
-      setStatus(value);
-    } else {
-      setStatus('');
-    }
-    search();
-  };
-  // 筛选题目标签（待做）
-  const handleTags = async (arr) => {
-    if (arr) {
-      await setTags(arr);
-    }
-    search();
-  };
-  // 筛选题目标题
-  const handleTitle = (value) => {
-    if (value) {
-      setTitle(value);
-    } else {
-      setTitle('');
-    }
-    search();
-  };
-  // 根据要求合并筛选
-  const search = () => {
-    let flag = true;
-    if (tags.length > 0) {
-      for (let tag of tags) {
-        for (let tql of item['tags']) {
-          if (tql !== tag) {
-            flag = false;
-            return;
-          }
-        }
-      }
-    }
-    const copyExam = exam.slice();
-    const arr = copyExam.filter(
-      (item) =>
-        item['level'][0].indexOf(level) !== -1 &&
-        item['status'][0].indexOf(status) !== -1 &&
-        item['title'].indexOf(title) !== -1 &&
-        flag,
-    );
-    console.log('arr前', arr);
-    console.log('exam前', exam);
-    setExam(arr);
-    console.log('arr后', arr);
-    console.log('exam后', exam);
+const AlgorithmDetail = () => {
+  const [visible, setVisible] = useState(false);
+  const [placement, setPlacement] = useState('bottom');
+  const showDrawer = () => {
+    setVisible(true);
   };
 
-  // 不太正确的筛选处理，暂时留着，看看有没有用
-  const choice = async (value) => {
-    const type = ['简单', '中等', '困难'].includes(value)
-      ? 'level'
-      : ['未开始', '已通过', '尝试过'].includes(value)
-        ? 'status'
-        : 'tags';
-    const obj = { value: [value], type };
-    const newFilterArr = filterArr.slice();
-    let testName = '',
-      testLevel = '',
-      testStatus = '',
-      testTags = '';
+  const onChange = (e) => {
+    setPlacement(e.target.value);
+  };
 
-    if (newFilterArr.length === 0) {
-      newFilterArr.push(obj);
-    } else {
-      for (let i = 0; i < newFilterArr.length; i++) {
-        const obj = newFilterArr[i];
-        if (type !== 'tags' && obj.type === type) {
-          newFilterArr[i].value[0] = value;
-        } else if (type === 'tags' && obj.type === type) {
-          for (let j = 0; j < obj.value.length; j++) {
-            if (obj.value[j] === value) {
-              newFilterArr[i].value.slice(j, 1);
-            } else if (j === obj.value.length - 1) {
-              newFilterArr[i].value.push(obj);
-            }
-          }
-        } else if (i === newFilterArr.length - 1) {
-          newFilterArr.push(obj);
-        }
-      }
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  const [tabKey, setTabKey] = useState('problemInfo');
+  const [codeData, setCodeData] = useState(
+    'public class Test {\n' +
+    '  /**\n' +
+    '   * 姓名\n' +
+    '   */\n' +
+    '  private String name;\n' +
+    '  \n' +
+    '  /**\n' +
+    '   * 年龄\n' +
+    '   */\n' +
+    '  public Integer age;\n' +
+    '  \n' +
+    '  /**\n' +
+    '   * 薪资\n' +
+    '   */\n' +
+    '  protected Double money;\n' +
+    '}',
+  );
+  const [instance, setInstance] = useState(null);
+  const { Option } = Select;
+  const [codeTheme, setCodeTheme] = useState('dracula');
+
+  function handleSelectChange(option) {
+    setCodeTheme(option);
+  }
+
+  const renderChildrenByTabKey = (tabValue) => {
+    if (tabValue === 'problemInfo') {
+      return <ProblemInfo />;
     }
-
-    newFilterArr.map((item) => {
-      switch (item.type) {
-        case 'level':
-          testLevel = item.value[0];
-          return;
-        case 'status':
-          testStatus = item.value[0];
-          return;
-        case 'title':
-          testName = item.value[0];
-          return;
-        case 'tags':
-          testTags = item.value;
-          return;
-      }
-    });
-
-    const newExam = data.filter((item) => {
-      const flag = item['level'][0].indexOf(testLevel) !== -1;
-      const flag2 = item['status'][0].indexOf(testStatus) !== -1;
-      const flag3 = item['title'].indexOf(testName) !== -1;
-      let flag4 = true;
-      for (let tag of testTags) {
-        for (let t of item['tags']) {
-          if (t !== tag) {
-            flag4 = false;
-            return;
-          }
-        }
-      }
-      if (flag && flag2 && flag3 && flag4) {
-        return item;
-      }
-    });
-
-    setExam(newExam);
-    setFilterArr(newFilterArr);
+    if (tabValue === 'commentInfo') {
+      return <CommentInfo />;
+    }
+    if (tabValue === 'solutionInfo') {
+      return <SolutionInfo />;
+    }
+    if (tabValue === 'commitInfo') {
+      return <CommitInfo />;
+    }
+    return null;
   };
 
   return (
-    <Card bordered={false}>
-      <Row>
-        <Space>
-          {/*难度*/}
-          <Col>
-            <Select style={{ width: 120 }} defaultValue="难度" onChange={handleLevel}>
-              {levelArr.map((item) => (
-                <Select.Option key={item.class} value={item.value}>
-                  <span style={{ color: item.color }}>{item.value}</span>
-                </Select.Option>
-              ))}
-            </Select>
+    <PageContainer
+      onTabChange={(tab) => {
+        setTabKey(tab);
+      }}
+      header={{
+        title: '2. 两数相加',
+        ghost: false,
+        tags: [
+          <Tag color={'green'} key={'11'}>
+            简 单
+          </Tag>,
+          // <Tag color={"yellow"}>中 等</Tag>,
+          // <Tag color={"red"}>困 难</Tag>,
+        ],
+      }}
+      tabList={[
+        {
+          tab: [
+            <span>
+              <FileTextOutlined />
+              问题
+            </span>,
+          ],
+          key: 'problemInfo',
+        },
+        {
+          tab: [
+            <span>
+              <CoffeeOutlined />
+              评论
+            </span>,
+          ],
+          key: 'commentInfo',
+        },
+        {
+          tab: [
+            <span>
+              <SolutionOutlined />
+              题解
+            </span>,
+          ],
+          key: 'solutionInfo',
+          // disabled: true,
+        },
+        {
+          tab: [
+            <span>
+              <FieldTimeOutlined />
+              提交记录
+            </span>,
+          ],
+          key: 'commitInfo',
+          // disabled: true,
+        },
+      ]}
+      footer={[
+        <Button type={'primary'} key={'111'} ghost>
+          <CaretRightOutlined />
+          执行代码
+        </Button>,
+        <Button type={'primary'} key={'222'} onClick={showDrawer}>
+          提 交
+        </Button>,
+      ]}
+    >
+      <GridContent>
+        <Row gutter={24}>
+          <Col lg={24} md={24}>
+            {renderChildrenByTabKey(tabKey)}
           </Col>
-
-          {/*状态*/}
-          <Col>
-            <Select style={{ width: 120 }} defaultValue="状态" onChange={handleStatus}>
-              {statusArr.map((item) => (
-                <Select.Option key={item.class} value={item.value}>
-                  <span style={{ color: item.color }}>{item.value}</span>
-                </Select.Option>
-              ))}
-            </Select>
-          </Col>
-
-          {/*标签*/}
-          <Col>
-            <Select
-              style={{ width: 120 }}
-              defaultValue="标签"
-              onChange={handleTags}
-              allowClear={true}
+        </Row>
+        <Row gutter={24}>
+          <Col lg={24} md={24} span={24}>
+            <Card
+              style={{ marginTop: 20 }}
+              bordered={false}
+              hoverable={true}
+              title={
+                <Row>
+                  <Col span={5} offset={15}>
+                    <strong>代码主题：</strong>
+                    <Select
+                      bordered={false}
+                      key={33333}
+                      defaultValue="dracula"
+                      style={{ width: 120 }}
+                      onChange={handleSelectChange}
+                    >
+                      <Option key={1} value="dracula">
+                        dracula
+                      </Option>
+                      <Option key={2} value="solarized">
+                        solarized
+                      </Option>
+                      <Option key={3} value="blackboard">
+                        blackboard
+                      </Option>
+                      <Option key={4} value="eclipse">
+                        eclipse
+                      </Option>
+                      <Option key={5} value="idea">
+                        idea
+                      </Option>
+                    </Select>
+                  </Col>
+                  <Col span={4}>
+                    <strong>语言：</strong>
+                    <Select
+                      bordered={false}
+                      key={1111}
+                      defaultValue="Java"
+                      style={{ width: 120 }}
+                      onChange={handleSelectChange}
+                    >
+                      <Option key={11} value="Java">
+                        Java
+                      </Option>
+                      <Option key={12} value="Python" disabled>
+                        Python
+                      </Option>
+                      <Option key={13} value="JS" disabled>
+                        JS
+                      </Option>
+                      <Option key={14} value="C++" disabled>
+                        C++
+                      </Option>
+                    </Select>
+                  </Col>
+                </Row>
+              }
             >
-              {tagsArr.map((item) => (
-                <Select.Option key={item.class} value={item.value}>
-                  <span>{item.value}</span>
-                </Select.Option>
-              ))}
-            </Select>
-          </Col>
+              {/* https://blog.csdn.net/qq_40550973/article/details/94922497   */}
+              <CodeMirror
+                // onCursorActivity={e => e.showHint() /*调用显示提示*/ }
+                // editorDidMount={editor => { {instance = editor }}
+                value={codeData}
+                // editorDidAttach={editor => instance}
+                editorDidMount={(editor) => {
+                  editor.setSize('auto', '800px');
+                  editor.on('inputRead', function () {
+                    // editor.on("cursorActivity", function () {
+                    // 调用显示提示
+                    editor.showHint();
+                  });
+                  setInstance(editor);
+                }}
+                options={{
+                  // 配置：https://www.cnblogs.com/minjh/p/15044706.html
+                  mode: { name: 'text/x-java', json: true }, // 语言
+                  // mode: {name:'text/css'},
+                  lineNumbers: true, // 是否显示行号
+                  completeSingle: false,
+                  readOnly: false, // 是否只读
+                  // hintOptions: {hint: },
+                  // theme: 'blackboard',// 主题
+                  // theme: 'solarized dark',
+                  theme: codeTheme,
+                  autofocus: true, // 自动获取焦点
+                  styleActiveLine: true, // 光标代码高亮
+                  smartIndent: true, // 自动缩进
+                  cursorHeight: 1,
+                  // start-设置支持代码折叠
+                  lineWrapping: true, // 是 否支持代码折叠
+                  foldGutter: true,
+                  gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'], // end
+                  extraKeys: {
+                    // "Alt": "autocomplete",
+                    'Ctrl-S': function (editor) {
+                      // editor.setValue(editor)
+                      // that.codeSave(editor)
+                    },
+                    'Ctrl-Z': function (editor) {
+                      editor.undo();
+                    }, // undo
+                    F8: function (editor) {
+                      editor.redo();
+                    }, // Redo
+                  },
+                  matchBrackets: true, // 括号匹配，光标旁边的括号都高亮显示
+                  autoCloseBrackets: true, // 键入时将自动关闭()[]{}''""
+                  lint: true, // 错误提示
+                }}
+                // onChange={this.codeOnChange}
 
-          {/*输入框搜索*/}
-          <Col>
-            <Select
-              showSearch
-              key="search_algorithm"
-              open={false}
-              style={{ width: 200 }}
-              placeholder="搜索题号、标题或内容"
-              onSearch={handleTitle}
-              allowClear={true}
-              onClear={handleTitle}
-            ></Select>
-          </Col>
-        </Space>
-      </Row>
+                // 在失去焦点的时候触发，这个时候放数据最好
+                // onBlur={this.codeOnBlur}
 
-      {/*显示筛选的条件*/}
-      <Row>
-        <Space>
-          <Col>
-            <Tag>
-              <span>{level}</span>
-              {level ? <CloseOutlined onClick={handleLevel} /> : null}
-            </Tag>
+                // // 这个必须加上，否则在一些情况下，第二次打开就会有问题
+                // //     onBeforeChange={(editor, data, value) => {
+                // //       console.log("onBeforeChange fresh")
+                // //       console.log(JSON.stringify(data));
+                // //     }}
+                //     /* HERE: pick out only the value. and might as well get name. */
+              />
+            </Card>
           </Col>
-          <Col offset={1}>
-            <Tag>
-              <span>{status}</span>
-              {status ? <CloseOutlined onClick={handleStatus} /> : null}
-            </Tag>
-          </Col>
-          <Col offset={1}>
-            <div>
-              {tags &&
-                tags.map((item) => (
-                  <Tag>
-                    <span>{item}</span>
-                    <CloseOutlined onClick={handleTags} />
-                  </Tag>
-                ))}
-            </div>
-          </Col>
-          {/*{*/}
-          {/*  filterArr.length > 0 ?*/}
-          {/*    filterArr.map(item => (*/}
-          {/*      <Col offset={1}>*/}
-          {/*        <Tag>*/}
-          {/*          <span >{item.value}<CloseOutlined /></span>*/}
-          {/*        </Tag>*/}
-          {/*      </Col>*/}
-          {/*    )) : null*/}
-          {/*}*/}
-        </Space>
-      </Row>
-
-      <Table columns={columns} dataSource={exam} />
-    </Card>
+        </Row>
+        <Drawer
+          title="Drawer with extra actions"
+          placement={placement}
+          width={500}
+          onClose={onClose}
+          visible={visible}
+          extra={
+            <Space>
+              <Button onClick={onClose}>Cancel</Button>
+              <Button type="primary" onClick={onClose}>
+                OK
+              </Button>
+            </Space>
+          }
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Drawer>
+      </GridContent>
+    </PageContainer>
   );
 };
 
-export default AlgorithmList;
+export default AlgorithmDetail;
