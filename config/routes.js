@@ -348,8 +348,6 @@ export default [
     name: 'about-me',
     icon: 'user',
     path: 'https://blog.csdn.net/weixin_43591980?type=blog',
-    // path: '/about-me',
-    // component: './TableList',
   },
   {
     path: '/tools',
