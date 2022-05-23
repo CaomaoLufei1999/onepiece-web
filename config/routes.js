@@ -170,28 +170,27 @@ export default [
     ],
   },
   {
-    path: '/talk',
-    name: 'talk',
+    path: '/bbs',
+    name: 'bbs',
     icon: 'message',
-    // component: './Talk',
     routes: [
       {
-        path: '/talk/topic',
+        path: '/bbs/topic',
         name: 'topic',
-        component: './Talk/Topic',
+        component: './BBS/Topic',
       },
       {
-        path: '/talk/topic/activities',
-        component: './Talk/Topic/ActivitiesPage',
+        path: '/bbs/topic/activities',
+        component: './BBS/Topic/ActivitiesPage',
       },
       {
-        path: '/talk/topic/detail',
-        component: './Talk/Topic/DetailPage',
+        path: '/bbs/topic/detail',
+        component: './BBS/Topic/DetailPage',
       },
       {
-        path: '/talk/advice',
+        path: '/bbs/advice',
         name: 'advice',
-        component: './Talk/Advice',
+        component: './BBS/Advice',
       },
       {
         component: './404',

@@ -1,5 +1,5 @@
-import TopicInfo from '@/pages/Talk/Topic/components/TopicInfo';
-import TextEditor from '@/pages/Talk/Topic/components/TextEditor';
+import TopicInfo from '@/pages/BBS/Topic/components/TopicInfo';
+import TextEditor from '@/pages/BBS/Topic/components/TextEditor';
 import { Card, Space } from 'antd';
 import React from 'react';
 import { GridContent } from '@ant-design/pro-layout';

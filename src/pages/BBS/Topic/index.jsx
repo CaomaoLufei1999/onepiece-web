@@ -52,7 +52,7 @@ const Topic = () => {
             title="热门活动"
             style={{ width: 300 }}
             actions={[
-              <Link to="/talk/topic/activities">
+              <Link to="/bbs/topic/activities">
                 <Button>查看更多</Button>
               </Link>,
             ]}
