@@ -54,6 +54,10 @@ export default [
             component: './User/Account/Setting',
           },
           {
+            path: '/account/write-blog',
+            component: './Article/Editor',
+          },
+          {
             // name: 'message',
             path: '/account/message',
             component: './User/Account/Message',
@@ -62,6 +66,10 @@ export default [
             // name: 'message',
             path: '/account/control-blog',
             component: './User/Account/Manage',
+          },
+          {
+            path: '/account/history',
+            component: './User/Account/Center',
           },
           {
             // name: 'chat',
@@ -162,23 +170,27 @@ export default [
     ],
   },
   {
-    path: '/talk',
-    name: 'talk',
+    path: '/bbs',
+    name: 'bbs',
     icon: 'message',
-    // component: './Talk',
     routes: [
       {
-        path: '/talk/topic',
+        path: '/bbs/topic',
         name: 'topic',
-        component: './Talk/Topic',
+        component: './BBS/Topic',
       },
       {
-        path: '/talk/topic/activities',
-        component: './Talk/Topic/ActivitiesPage',
+        path: '/bbs/topic/activities',
+        component: './BBS/Topic/ActivitiesPage',
       },
       {
-        path: '/talk/topic/detail',
-        component: './Talk/Topic/DetailPage',
+        path: '/bbs/topic/detail',
+        component: './BBS/Topic/DetailPage',
+      },
+      {
+        path: '/bbs/advice',
+        name: 'advice',
+        component: './BBS/Advice',
       },
       {
         component: './404',
@@ -189,7 +201,47 @@ export default [
     name: 'blog',
     icon: 'edit',
     path: '/community',
+    // component: './Community',
+    // path: '/community/back-end',
     component: './Community',
+    exact: false,
+    routes: [
+      {
+        path: '/community/back-end',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/database',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/front-end',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/algorithm',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/procedural-life',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/study-notes',
+        component: './Community',
+        exact: false,
+      },
+      {
+        path: '/community/other',
+        component: './Community',
+        exact: false,
+      },
+    ],
   },
   {
     path: '/article',
@@ -197,6 +249,7 @@ export default [
       {
         path: '/article/detail',
         component: './Article/Viewer',
+        exact: false,
       },
       {
         path: '/article/edit',
@@ -215,6 +268,11 @@ export default [
       {
         path: '/schedule-study/algorithm',
         name: 'algorithm',
+        component: './ScheduleStudy/AlgorithmList',
+      },
+      {
+        path: '/schedule-study/algorithm/detail',
+        hideChildrenInMenu:true,
         component: './ScheduleStudy/Algorithm',
       },
       {
@@ -226,6 +284,7 @@ export default [
         path: '/schedule-study/program',
         name: 'program',
         component: './ScheduleStudy/Program',
+        disabled: true,
       },
       {
         component: './404',
@@ -242,26 +301,31 @@ export default [
         path: '/knowledge-tree/java',
         name: 'java',
         component: './Home',
+        disabled: true,
       },
       {
         path: '/knowledge-tree/python',
         name: 'python',
         component: './Home',
+        disabled: true,
       },
       {
         path: '/knowledge-tree/web',
         name: 'web',
         component: './Home',
+        disabled: true,
       },
       {
         path: '/knowledge-tree/precious',
         name: 'precious',
         component: './Home',
+        disabled: true,
       },
       {
         path: '/knowledge-tree/other',
         name: 'other',
         component: './Home',
+        disabled: true,
       },
       {
         component: './404',
@@ -282,8 +346,7 @@ export default [
   {
     name: 'about-me',
     icon: 'user',
-    path: '/about-me',
-    component: './TableList',
+    path: 'https://blog.csdn.net/weixin_43591980?type=blog',
   },
   {
     path: '/tools',

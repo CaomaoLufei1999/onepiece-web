@@ -7,8 +7,8 @@ import Projects from './components/History';
 import Articles from './components/Articles';
 import { queryCurrent } from './service';
 import styles from './Center.less';
-import History from "./components/History";
-import RecentPublish from "./components/RecentPublish";
+import History from './components/History';
+import RecentPublish from './components/RecentPublish';
 const operationTabList = [
   {
     key: 'articles',
@@ -129,7 +129,8 @@ const TagList = ({ tags }) => {
 };
 
 const Center = () => {
-  const [tabKey, setTabKey] = useState('articles'); //  获取用户信息
+  const initTabKey = window.location.pathname == '/account/history' ? 'projects' : 'articles';
+  const [tabKey, setTabKey] = useState(initTabKey); //  获取用户信息
 
   const { data: currentUser, loading } = useRequest(() => {
     return queryCurrent();

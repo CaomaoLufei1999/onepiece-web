@@ -1,98 +1,83 @@
-import React from 'react';
-import {StarTwoTone, LikeOutlined, MessageFilled, LoadingOutlined} from '@ant-design/icons';
-import {useRequest} from 'umi';
-import {Button, List, Skeleton, Tag} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { StarTwoTone, LikeOutlined, MessageFilled, LoadingOutlined } from '@ant-design/icons';
+import { Skeleton, Divider, Button, List, Tag } from 'antd';
+import { Link } from 'umi';
 import ArticleListContent from './ArticleListContent';
-import {queryFakeList} from '../../service';
 import styles from './index.less';
-
-const pageSize = 8;
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const New = () => {
-  const {data, reload, loading, loadMore, loadingMore} = useRequest(
-    () => {
-      return queryFakeList({
-        count: pageSize,
-      });
-    },
-    {
-      loadMore: true,
-    },
-  );
-  const {data: listData} = useRequest(() => {
-    return queryFakeList({
-      count: 30,
-    });
-  });
-  const list = data?.list || [];
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  let count = 0;
+  const loadMoreData = () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    fetch(`http://localhost:3000/home_new_list?id_gte=${count * 8}&id_lte=${(count + 1) * 8 - 1}`)
+      .then((res) => res.json())
+      .then((body) => {
+        setData([...data, ...body]);
 
-  const loadMoreDom = list.length > 0 && (
-    <div
-      style={{
-        textAlign: 'center',
-        marginTop: 16,
-      }}
-    >
-      <Button
-        onClick={loadMore}
-        style={{
-          paddingLeft: 48,
-          paddingRight: 48,
-        }}
-      >
-        {loadingMore ? (
-          <span>
-            <LoadingOutlined/> 加载中...
-          </span>
-        ) : (
-          '加载更多'
-        )}
-      </Button>
-    </div>
-  );
-  const IconText = ({icon, text}) => (
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+    count++;
+  };
+  useEffect(() => {
+    loadMoreData();
+  }, []);
+
+  const IconText = ({ icon, text }) => (
     <span>
       {icon} {text}
     </span>
   ); // 获取tab列表数据
 
-
   return (
-    <List
-      size="large"
-      className={styles.articleList}
-      loadMore={loadMoreDom}
-      loading={loading}
-      rowKey="id"
-      itemLayout="vertical"
-      dataSource={list}
-      renderItem={(item) => (
+    <InfiniteScroll
+      dataLength={data.length}
+      next={loadMoreData}
+      hasMore={data.length < 100}
+      loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+      endMessage={<Divider plain>暂时只有这么多哦！！！</Divider>}
+      scrollableTarget="scrollableDiv"
+    >
+      <List
+        size="large"
+        className={styles.articleList}
+        // loadMore={loadMoreDom}
+        // loading={loading}
+        rowKey="id"
+        itemLayout="vertical"
+        dataSource={data}
+        renderItem={(item) => (
           <List.Item
             key={item.id}
             actions={[
-              <IconText key="star" icon={<StarTwoTone/>} text={item.star}/>,
-              <IconText key="like" icon={<LikeOutlined/>} text={item.like}/>,
-              <IconText key="message" icon={<MessageFilled/>} text={item.message}/>,
+              <IconText key="star" icon={<StarTwoTone />} text={item.star} />,
+              <IconText key="like" icon={<LikeOutlined />} text={item.like} />,
+              <IconText key="message" icon={<MessageFilled />} text={item.message} />,
             ]}
           >
             <List.Item.Meta
-              title={
-                <a className={styles.listItemMetaTitle} href={item.href}>
-                  {item.title}
-                </a>
-              }
+              title={<Link to={`/article/detail/${item.id}`}>{item.title}</Link>}
               description={
                 <span>
-                <Tag>Ant Design</Tag>
-                <Tag>设计语言</Tag>
-                <Tag>蚂蚁金服</Tag>
-              </span>
+                  <Tag>Ant Design</Tag>
+                  <Tag>设计语言</Tag>
+                  <Tag>蚂蚁金服</Tag>
+                </span>
               }
             />
-            <ArticleListContent data={item}/>
+            <ArticleListContent data={item} />
           </List.Item>
-      )}
-    />
+        )}
+      />
+    </InfiniteScroll>
   );
 };
 

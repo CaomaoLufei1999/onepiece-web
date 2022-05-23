@@ -2,17 +2,20 @@ import { Avatar, List } from 'antd';
 import React from 'react';
 import classNames from 'classnames';
 import styles from './NoticeList.less';
+import { Link } from 'umi';
 
 const NoticeList = ({
   list = [],
   onClick,
   onClear,
   title,
-  onViewMore,
+  // onViewMore,
   emptyText,
   showClear = true,
   clearText,
   viewMoreText,
+  viewMoreHref,
+  viewTabKey,
   showViewMore = false,
 }) => {
   if (!list || list.length === 0) {
@@ -80,13 +83,15 @@ const NoticeList = ({
         ) : null}
         {showViewMore ? (
           <div
-            onClick={(e) => {
-              if (onViewMore) {
-                onViewMore(e);
-              }
-            }}
+          // onClick={(e) => {
+          //   if (onViewMore) {
+          //     onViewMore(e);
+          //   }
+          // }}
           >
-            {viewMoreText}
+            <Link to={viewMoreHref}>
+              <div>{viewMoreText}</div>
+            </Link>
           </div>
         ) : null}
       </div>

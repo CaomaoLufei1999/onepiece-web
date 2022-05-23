@@ -1,32 +1,49 @@
-import React from 'react';
-import {StarTwoTone, LikeOutlined, MessageFilled, LoadingOutlined} from '@ant-design/icons';
-import {useRequest} from 'umi';
-import {Button, List, Skeleton, Tag} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { StarTwoTone, LikeOutlined, MessageFilled, LoadingOutlined } from '@ant-design/icons';
+import { Button, List, Tag } from 'antd';
 import ArticleListContent from './ArticleListContent';
-import {queryFakeList} from '../../service';
 import styles from './index.less';
 
-const pageSize = 8;
-
 const Recommend = () => {
-  const {data, reload, loading, loadMore, loadingMore} = useRequest(
-    () => {
-      return queryFakeList({
-        count: pageSize,
-      });
-    },
-    {
-      loadMore: true,
-    },
-  );
-  const {data: listData} = useRequest(() => {
-    return queryFakeList({
-      count: 30,
-    });
-  });
-  const list = data?.list || [];
+  const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [recommendList, setRecommendList] = useState([]);
+  const [data, setData] = useState([]);
 
-  const loadMoreDom = list.length > 0 && (
+  const loadRecommendList = () => {
+    if (loading) {
+      return;
+    }
+    fetch('http://localhost:3000/home_recommend_list')
+      .then((res) => res.json())
+      .then((body) => {
+        setRecommendList([...body]);
+        setData([...body]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    loadRecommendList();
+  }, []);
+
+  const loadMore = () => {
+    setLoadingMore(true);
+    fetch('http://localhost:3000/home_recommend_list')
+      .then((res) => res.json())
+      .then((body) => {
+        const newData = data.concat([...body]);
+        setData(newData);
+        setRecommendList(newData);
+        setLoadingMore(false);
+        window.dispatchEvent(new Event('resize'));
+      });
+  };
+
+  const loadMoreDom = recommendList.length > 0 && (
     <div
       style={{
         textAlign: 'center',
@@ -42,7 +59,7 @@ const Recommend = () => {
       >
         {loadingMore ? (
           <span>
-            <LoadingOutlined/> 加载中...
+            <LoadingOutlined /> 加载中...
           </span>
         ) : (
           '加载更多'
@@ -50,12 +67,11 @@ const Recommend = () => {
       </Button>
     </div>
   );
-  const IconText = ({icon, text}) => (
+  const IconText = ({ icon, text }) => (
     <span>
       {icon} {text}
     </span>
   ); // 获取tab列表数据
-
 
   return (
     <List
@@ -65,36 +81,44 @@ const Recommend = () => {
       loading={loading}
       rowKey="id"
       itemLayout="vertical"
-      dataSource={list}
+      dataSource={recommendList}
       renderItem={(item) => (
         <List.Item
           key={item.id}
           actions={[
-            <IconText key="star" icon={<StarTwoTone/>} text={item.star}/>,
-            <IconText key="like" icon={<LikeOutlined/>} text={item.like}/>,
-            <IconText key="message" icon={<MessageFilled/>} text={item.message}/>,
+            <IconText key="star" icon={<StarTwoTone />} text={item.star} />,
+            <IconText key="like" icon={<LikeOutlined />} text={item.like} />,
+            <IconText key="message" icon={<MessageFilled />} text={item.message} />,
           ]}
         >
           <List.Item.Meta
             title={
               <a className={styles.listItemMetaTitle} href={item.href}>
                 {item.title}
-                <Tag color="#f50" style={{
-                  float: "right"
-                }}>
+                <Tag
+                  color="#f50"
+                  style={{
+                    float: 'right',
+                  }}
+                >
                   精选
                 </Tag>
               </a>
             }
             description={
               <span>
+                {/*{*/}
+                {/*  item.tags.map(tag => (*/}
+                {/*    <Tag>{tag}</Tag>*/}
+                {/*  ))*/}
+                {/*}*/}
                 <Tag>Ant Design</Tag>
                 <Tag>设计语言</Tag>
                 <Tag>蚂蚁金服</Tag>
               </span>
             }
           />
-          <ArticleListContent data={item}/>
+          <ArticleListContent data={item} />
         </List.Item>
       )}
     />

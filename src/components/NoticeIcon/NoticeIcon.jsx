@@ -16,9 +16,10 @@ const NoticeIcon = (props) => {
       onClear,
       onTabChange,
       onItemClick,
-      onViewMore,
+      // onViewMore,
       clearText,
       viewMoreText,
+      viewMoreHref,
     } = props;
 
     if (!children) {
@@ -40,11 +41,13 @@ const NoticeIcon = (props) => {
           <NoticeList
             clearText={clearText}
             viewMoreText={viewMoreText}
+            viewTabKey={tabKey}
+            viewMoreHref={viewMoreHref + '?' + tabKey}
             list={list}
             tabKey={tabKey}
             onClear={() => onClear && onClear(title, tabKey)}
             onClick={(item) => onItemClick && onItemClick(item, child.props)}
-            onViewMore={(event) => onViewMore && onViewMore(child.props, event)}
+            // onViewMore={(event) => onViewMore && onViewMore(child.props, event)}
             showClear={showClear}
             showViewMore={showViewMore}
             title={title}

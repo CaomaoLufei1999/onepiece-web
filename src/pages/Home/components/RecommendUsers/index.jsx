@@ -1,27 +1,24 @@
-import {List, Avatar, Button, Skeleton, Space} from 'antd';
-import React from "react";
-import * as ReactDOM from "react-dom";
-import Home from "@/pages/Home";
-
-const count = 3;
-const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+import { List, Avatar, Button, Skeleton, Space } from 'antd';
+import React from 'react';
+import * as ReactDOM from 'react-dom';
+import Home from '@/pages/Home';
 
 class RecommendUsers extends React.Component {
   state = {
     initLoading: true,
     loading: false,
     data: [],
-    list: [],
+    goodAuthorList: [],
   };
 
   componentDidMount() {
-    fetch(fakeDataUrl)
-      .then(res => res.json())
-      .then(res => {
+    fetch('http://localhost:3000/home_good_author_list')
+      .then((res) => res.json())
+      .then((body) => {
         this.setState({
           initLoading: false,
-          data: res.results,
-          list: res.results,
+          data: [...body],
+          goodAuthorList: [...body],
         });
       });
   }
@@ -29,18 +26,15 @@ class RecommendUsers extends React.Component {
   onLoadMore = () => {
     this.setState({
       loading: true,
-      list: this.state.data.concat(
-        [...new Array(count)].map(() => ({loading: true, name: {}, picture: {}})),
-      ),
     });
-    fetch(fakeDataUrl)
-      .then(res => res.json())
-      .then(res => {
-        const data = this.state.data.concat(res.results);
+    fetch('http://localhost:3000/home_good_author_list')
+      .then((res) => res.json())
+      .then((body) => {
+        const data = this.state.data.concat([...body]);
         this.setState(
           {
             data,
-            list: data,
+            goodAuthorList: data,
             loading: false,
           },
           () => {
@@ -54,7 +48,7 @@ class RecommendUsers extends React.Component {
   };
 
   render() {
-    const {initLoading, loading, list} = this.state;
+    const { initLoading, loading, goodAuthorList } = this.state;
     const loadMore =
       !initLoading && !loading ? (
         <div
@@ -74,21 +68,21 @@ class RecommendUsers extends React.Component {
         loading={initLoading}
         itemLayout="horizontal"
         loadMore={loadMore}
-        dataSource={list}
-        renderItem={item => (
+        dataSource={goodAuthorList}
+        renderItem={(item) => (
           <List.Item>
             <Skeleton avatar title={false} loading={item.loading} active>
               <List.Item.Meta
-                avatar={
-                  <Avatar src={item.picture.large}/>
-                }
+                avatar={<Avatar src={item.avatar} />}
                 title={
                   <Space>
-                    <a href="https://ant.design">{item.name.last}</a>
-                    <Button size={"small"} shape={"round"}>关 注</Button>
+                    <a href={item.href}>{item.name}</a>
+                    <Button size={'small'} shape={'round'}>
+                      关 注
+                    </Button>
                   </Space>
                 }
-                description="2022年CSDN博客之星TOP8，CSDN博客专家，Java领域优质创作者，阿里巴巴全栈开发工程师。"
+                description={item.desc}
               />
             </Skeleton>
           </List.Item>

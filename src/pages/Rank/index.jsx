@@ -20,9 +20,10 @@ const TableList = (props) => {
    * @zh-CN 国际化配置
    * */
   let rankName = [
+    { title: '博客热榜', description: '72小时热度，日更' },
+
     { title: '积分总榜', description: '创作积累积分，周更' },
     { title: '作者周榜', description: '近期活跃作者，周更' },
-    { title: '博客热榜', description: '72小时热度，日更' },
     { title: '领域内容榜单', description: '专业领域精品，日更' },
     { title: '解题作者榜单', description: '作者解题榜单，日更' },
   ];
@@ -49,9 +50,9 @@ const TableList = (props) => {
   //   loadRankData();
   // }, []);
   let map = {
-    1: 'total',
+    1: 'blog',
     2: 'weekly',
-    3: 'blog',
+    3: 'total',
     4: 'content',
     5: 'resolve',
   };

@@ -1,0 +1,9 @@
+//{
+//  "port": 80,              //自定义端口
+//  "watch": true,             //自动监听变化
+//  "static": "./public",
+//  "read-only": false,        //是否只能使用GET请求
+//  "no-cors": false,          //是否支持跨域
+//  "no-gzip": false,          //是否支持压缩
+//  "routes": "baseRoute.json"     //路由配置地址
+//}

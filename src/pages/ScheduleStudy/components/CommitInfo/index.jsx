@@ -1,4 +1,4 @@
-import {Card, Space, Table, Tag} from "antd";
+import {Button, Card, Space, Table, Tag} from "antd";
 import {color} from "mockjs/src/mock/random/color";
 
 const CommitInfo = () => {
@@ -57,6 +57,16 @@ const CommitInfo = () => {
         </>
       ),
     },
+    {
+      title: '查看结果',
+      dataIndex: 'result_info',
+      key: 'result_info',
+      render: result_info => (
+        <>
+          <Button type={"primary"}>查看执行结果</Button>
+        </>
+      ),
+    },
   ];
 
   const data = [
@@ -66,6 +76,7 @@ const CommitInfo = () => {
       time_consuming: '32ms',
       language: 'Java',
       commit_time: '2022-04-10 01:42:33',
+      result_info: '',
     },
     {
       key: '2',
@@ -73,6 +84,7 @@ const CommitInfo = () => {
       time_consuming: 'N/A',
       language: 'Java',
       commit_time: '2022-04-10 01:42:33',
+      error_info: '',
     },
     {
       key: '3',
@@ -80,6 +92,7 @@ const CommitInfo = () => {
       time_consuming: 'N/A',
       language: 'Java',
       commit_time: '2022-04-10 01:42:33',
+      error_info: '',
     },
   ];
   return (
